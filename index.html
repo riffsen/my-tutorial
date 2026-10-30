@@ -1,0 +1,775 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>DeepSeek Harness 桌面版 安装与使用教程</title>
+<style>
+  :root{
+    --bg:#f6f7f9;
+    --card:#ffffff;
+    --ink:#1f2328;
+    --ink-2:#4a5158;
+    --ink-3:#6b7480;
+    --line:#e3e6ea;
+    --brand:#2b6cf0;
+    --brand-soft:#eaf1ff;
+    --warn:#b45309;
+    --warn-bg:#fff8ec;
+    --warn-line:#f3d7a7;
+    --danger:#b42318;
+    --danger-bg:#fff2f0;
+    --danger-line:#f3c3bd;
+    --ok:#0f7b3f;
+    --ok-bg:#eefaf2;
+    --ok-line:#bfe8cf;
+    --code-bg:#f2f4f7;
+    --radius:12px;
+    --shadow:0 1px 2px rgba(16,24,40,.04), 0 8px 24px rgba(16,24,40,.06);
+  }
+  *{box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{
+    margin:0;background:var(--bg);color:var(--ink);
+    font:16px/1.75 -apple-system,BlinkMacSystemFont,"Segoe UI","Microsoft YaHei","PingFang SC","Hiragino Sans GB",sans-serif;
+    -webkit-font-smoothing:antialiased;
+  }
+  a{color:var(--brand);text-decoration:none}
+  a:hover{text-decoration:underline}
+
+  /* 跳到正文 / 锚点留白 */
+  .skip{
+    position:absolute;left:-9999px;top:0;z-index:99;
+    background:var(--brand);color:#fff;padding:10px 16px;font-size:14px;
+    border-radius:0 0 8px 0;
+  }
+  .skip:focus{left:0}
+  [id]{scroll-margin-top:24px}
+
+  .wrap{display:flex;gap:28px;max-width:1240px;margin:0 auto;padding:28px 20px 80px;align-items:flex-start}
+
+  /* 侧边目录 */
+  .toc{
+    position:sticky;top:24px;flex:0 0 236px;background:var(--card);
+    border:1px solid var(--line);border-radius:var(--radius);padding:16px 14px;box-shadow:var(--shadow);
+    font-size:14px;max-height:calc(100vh - 48px);overflow:auto;
+  }
+  .toc h2{font-size:12px;letter-spacing:.12em;color:var(--ink-3);margin:0 0 10px 6px;font-weight:600}
+  .toc a{display:block;padding:6px 8px;border-radius:8px;color:var(--ink-2);line-height:1.4}
+  .toc a:hover{background:var(--brand-soft);color:var(--brand);text-decoration:none}
+  .toc a.active{background:var(--brand-soft);color:var(--brand);font-weight:600}
+  .toc .sub{padding-left:20px;font-size:13px;color:var(--ink-3)}
+  .toc-toggle{display:none}
+
+  main{flex:1 1 auto;min-width:0}
+
+  header.hero{
+    background:linear-gradient(135deg,#1f3a8a 0%,#2b6cf0 55%,#4f8bff 100%);
+    color:#fff;border-radius:16px;padding:34px 32px;box-shadow:var(--shadow);margin-bottom:24px;
+  }
+  header.hero h1{margin:0 0 10px;font-size:30px;line-height:1.3;letter-spacing:-.01em}
+  header.hero p{margin:0;color:#e6eeff;font-size:14.5px}
+  .meta{display:flex;flex-wrap:wrap;gap:8px;margin-top:16px}
+  .chip{background:rgba(255,255,255,.16);border:1px solid rgba(255,255,255,.3);border-radius:999px;padding:4px 12px;font-size:12.5px}
+
+  section.card{
+    background:var(--card);border:1px solid var(--line);border-radius:var(--radius);
+    padding:26px 28px;margin-bottom:20px;box-shadow:var(--shadow);scroll-margin-top:24px;
+  }
+  h2.sec{
+    font-size:22px;margin:0 0 18px;display:flex;align-items:center;gap:10px;line-height:1.35;
+  }
+  h2.sec .num{
+    flex:0 0 auto;display:inline-flex;align-items:center;justify-content:center;
+    width:30px;height:30px;border-radius:9px;background:var(--brand-soft);color:var(--brand);
+    font-size:15px;font-weight:700;
+  }
+  h3{font-size:17px;margin:26px 0 10px;color:var(--ink)}
+  h3:first-of-type{margin-top:6px}
+  p{margin:10px 0}
+  ul,ol{margin:10px 0;padding-left:24px}
+  li{margin:6px 0}
+  li > ul,li > ol{margin:6px 0}
+
+  /* 步骤列表 */
+  ol.steps{list-style:none;padding-left:0;counter-reset:s}
+  ol.steps > li{
+    counter-increment:s;position:relative;padding-left:42px;margin:14px 0;
+  }
+  ol.steps > li::before{
+    content:counter(s);position:absolute;left:0;top:2px;width:26px;height:26px;border-radius:50%;
+    background:var(--brand);color:#fff;font-size:13px;font-weight:700;
+    display:flex;align-items:center;justify-content:center;
+  }
+
+  .box{border-radius:10px;padding:14px 16px;margin:16px 0;border:1px solid;font-size:15px}
+  .box p:first-child{margin-top:0}
+  .box p:last-child{margin-bottom:0}
+  .box .t{font-weight:700;display:block;margin-bottom:4px}
+  .tip{background:var(--ok-bg);border-color:var(--ok-line);color:#08492a}
+  .tip .t{color:var(--ok)}
+  .warn{background:var(--warn-bg);border-color:var(--warn-line);color:#5c3a05}
+  .warn .t{color:var(--warn)}
+  .danger{background:var(--danger-bg);border-color:var(--danger-line);color:#5d1710}
+  .danger .t{color:var(--danger)}
+  .note{background:#f4f7ff;border-color:#cfdcf7;color:#22305c}
+  .note .t{color:var(--brand)}
+
+  /* 复制路径 */
+  .path{
+    display:flex;align-items:center;gap:10px;flex-wrap:wrap;
+    background:var(--code-bg);border:1px solid var(--line);border-radius:8px;
+    padding:9px 12px;margin:12px 0;font-family:ui-monospace,Consolas,"Cascadia Mono",monospace;font-size:14px;
+  }
+  .path code{flex:1 1 240px;color:#b42318;word-break:break-all}
+  .copy{
+    border:1px solid #cfd6df;background:#fff;border-radius:6px;padding:3px 10px;font-size:12.5px;
+    cursor:pointer;color:var(--ink-2);font-family:inherit;white-space:nowrap;
+  }
+  .copy:hover{border-color:var(--brand);color:var(--brand)}
+  .copy.done{background:var(--ok-bg);border-color:var(--ok-line);color:var(--ok)}
+
+  code.inl{background:var(--code-bg);border:1px solid var(--line);border-radius:5px;padding:1px 6px;font-family:ui-monospace,Consolas,monospace;font-size:.92em;color:#b42318}
+
+  /* 表格 */
+  .tbl-wrap{overflow-x:auto;margin:16px 0}
+  table{border-collapse:collapse;width:100%;font-size:15px;min-width:520px}
+  th,td{border:1px solid var(--line);padding:10px 12px;text-align:left;vertical-align:top}
+  th{background:#f3f6fb;font-weight:700;white-space:nowrap}
+  tbody tr:nth-child(even){background:#fafbfc}
+
+  /* 图片 */
+  figure{margin:20px 0;text-align:center}
+  figure img{
+    max-width:100%;border:1px solid var(--line);border-radius:10px;box-shadow:var(--shadow);
+    background:#fff;
+  }
+  figcaption{font-size:13.5px;color:var(--ink-3);margin-top:8px}
+  .img-missing{
+    display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;
+    min-height:130px;border:2px dashed #c8d0da;border-radius:10px;background:#fbfcfe;
+    color:var(--ink-3);font-size:13.5px;padding:18px;
+  }
+  .img-missing b{color:var(--ink-2);font-size:14px}
+  .img-missing span{font-family:ui-monospace,Consolas,monospace;color:#b42318;font-size:12.5px}
+
+  /* FAQ 折叠 */
+  details{border:1px solid var(--line);border-radius:10px;margin:10px 0;background:#fff;overflow:hidden}
+  details[open]{border-color:#cfdcf7;background:#fcfdff}
+  summary{cursor:pointer;padding:12px 16px;font-weight:600;font-size:15.5px;list-style:none;display:flex;gap:10px;align-items:flex-start}
+  summary::-webkit-details-marker{display:none}
+  summary::before{content:"▸";color:var(--brand);flex:0 0 auto;transition:transform .15s}
+  details[open] summary::before{transform:rotate(90deg)}
+  details .body{padding:0 16px 14px 38px;color:var(--ink-2);font-size:15px}
+  details .body p:first-child{margin-top:0}
+
+  footer{color:var(--ink-3);font-size:13px;text-align:center;padding:24px 0 0}
+
+  @media (max-width:900px){
+    .wrap{display:block;padding:16px 12px 60px}
+    .toc{position:static;max-height:none;margin-bottom:16px;flex:none;padding:10px 12px}
+    .toc h2{display:none}
+    .toc-toggle{
+      display:flex;align-items:center;justify-content:space-between;width:100%;
+      border:1px solid var(--line);background:#fff;border-radius:8px;
+      padding:9px 12px;font:inherit;font-size:15px;font-weight:600;color:var(--ink);cursor:pointer;
+    }
+    .toc-toggle::after{content:"▾";color:var(--brand);transition:transform .15s}
+    .toc.open .toc-toggle::after{transform:rotate(180deg)}
+    .toc-list{display:none;margin-top:8px}
+    .toc.open .toc-list{display:block}
+    header.hero{padding:24px 20px}
+    header.hero h1{font-size:23px}
+    section.card{padding:20px 18px}
+  }
+  @media print{
+    body{background:#fff}
+    .toc,.toc-toggle,.copy,.skip,header.hero .meta{display:none}
+    .wrap{display:block;max-width:none;padding:0}
+    header.hero{background:none;color:var(--ink);box-shadow:none;border-radius:0;
+      padding:0 0 10px;margin:0 0 20px;border-bottom:2px solid var(--ink)}
+    header.hero h1{font-size:22px;color:var(--ink)}
+    header.hero p{color:var(--ink-2)}
+    section.card{box-shadow:none;border:none;padding:0;margin:0 0 22px;page-break-inside:avoid}
+    details{border:none}
+    details > .body{display:block;padding-left:16px}
+    details summary::before{display:none}
+    a{color:var(--ink)}
+  }
+</style>
+</head>
+<body>
+<a class="skip" href="#main">跳到正文</a>
+<div class="wrap">
+
+  <nav class="toc" id="toc" aria-label="页面目录">
+    <h2>目录</h2>
+    <button class="toc-toggle" type="button" aria-expanded="false" aria-controls="toc-list">目录</button>
+    <div class="toc-list" id="toc-list">
+      <a href="#s0">0 · 先搞清楚四件事</a>
+      <a href="#s1">1 · 安装前的准备</a>
+      <a href="#s2">2 · 下载</a>
+      <a href="#s3">3 · 安装</a>
+      <a href="#s4">4 · 注册账户</a>
+      <a class="sub" href="#s41">4.1 手机号注册登录</a>
+      <a class="sub" href="#s42">4.2 用 API Key</a>
+      <a class="sub" href="#s43">4.3 暂时不想登录</a>
+      <a class="sub" href="#s44">4.4 首次进入的设置引导</a>
+      <a href="#s5">5 · 充值</a>
+      <a class="sub" href="#s51">5.1 在客户端里充值</a>
+      <a class="sub" href="#s52">5.2 在网页里充值</a>
+      <a href="#s6">6 · 第一次使用</a>
+      <a href="#s7">7 · 日常注意</a>
+      <a href="#s8">8 · 卸载</a>
+      <a class="sub" href="#s81">8.1 正确顺序</a>
+      <a class="sub" href="#s82">8.2 想彻底清干净</a>
+      <a class="sub" href="#s83">8.3 命令行版</a>
+      <a href="#s9">9 · 常见问题</a>
+      <a href="#s10">10 · 一页速查</a>
+    </div>
+  </nav>
+
+  <main id="main">
+    <header class="hero">
+      <h1>DeepSeek Harness 桌面版<br>安装与使用教程</h1>
+      <p>跟着一步一步点就行，不需要懂电脑。</p>
+      <div class="meta">
+        <span class="chip">适用：Windows 10 / 11（64 位）</span>
+        <span class="chip">软件版本：0.2.1-rc.3</span>
+        <span class="chip">全程约 15 分钟</span>
+        <span class="chip">更新：2026-10-28</span>
+      </div>
+    </header>
+
+    <!-- 0 -->
+    <section class="card" id="s0">
+      <h2 class="sec"><span class="num">0</span>先搞清楚四件事</h2>
+
+      <div class="box note">
+        <span class="t">① 它是干什么的</span>
+        DeepSeek Harness 是 DeepSeek 官方出的电脑客户端。它不只是聊天，还能读你电脑上的文件、整理资料、改代码、执行命令——是一个"能动手干活"的助手。
+      </div>
+
+      <div class="box note">
+        <span class="t">② 三个词的关系，打个比方就懂</span>
+        <b>Agent 是机床，模型是师傅，Token 是工资。</b>
+        <ul>
+          <li><b>机床 = Agent</b>，就是你要装的这个客户端。它提供工具并真正动手：读文件、写文件、跑命令、装环境。它自己不聪明，离开师傅就是一堆铁。</li>
+          <li><b>师傅 = 模型</b>，DeepSeek 的大模型。它负责动脑子：听懂你的话、决定下一步干什么、把代码写出来。它在云端跑，不在你这台电脑里。</li>
+          <li><b>工资 = Token</b>。模型每读一个字、每写一个字都算 Token，按量计费。工资（账户余额）决定你能请谁（用哪个模型）、能干多少活（能聊多少轮）。</li>
+        </ul>
+        机床越好，能干的活越杂；师傅越强，活干得越漂亮；工资决定这两样你能用多久。<b>所以你只需要装机床、给工资卡充钱——师傅在云上，不用装，也装不了。</b>
+      </div>
+
+      <div class="box danger">
+        <span class="t">③ 它要花钱，不是免费的</span>
+        平常在手机 App 或网页里跟 DeepSeek 聊天是免费的，但 Harness 走的是"API 按量计费"：用多少算多少，从账户余额里扣。
+        <b>余额为 0 时不能用，必须先充值。</b>（新用户有时送几元赠金，有没有、多久过期，以页面显示为准。）
+      </div>
+
+      <div class="box warn">
+        <span class="t">④ 只从官网下载</span>
+        官方入口只有这两个，别的地方下的都可能是改装版：
+        <ul>
+          <li><a href="https://www.deepseek.com/download/" target="_blank" rel="noopener">www.deepseek.com/download/</a></li>
+          <li><a href="https://www.deepseek.com/harness/" target="_blank" rel="noopener">www.deepseek.com/harness/</a></li>
+        </ul>
+        网盘、软件下载站、所谓"绿色版 / 汉化版"，常被塞广告甚至木马，别用。
+      </div>
+
+      <div class="box tip">
+        <span class="t">太长不看版</span>
+        官网下载 → 双击装 → 打开后点「登录」→ 手机号注册 → 点左下角账号 → <b>设置 → 账号与余额 → 充值</b> 充 10 元 → 回客户端选个文件夹 → 发一句话试试。
+      </div>
+
+      <details>
+        <summary>想多认几个名字？（不看也不影响往下做）</summary>
+        <div class="body">
+          <p><b>叫 Agent 的（机床）</b>：DeepSeek Harness、Pi、Claude Code、Cursor、GitHub Copilot、Codex CLI、Windsurf、Cline、Roo Code、OpenHands；国内的还有通义灵码、Trae、CodeBuddy、Qoder……</p>
+          <p><b>叫模型的（师傅）</b>：DeepSeek、GPT、Claude、Gemini、Grok；国内的 Qwen（通义千问）、Kimi、GLM（智谱）、豆包……</p>
+          <p>型号名字几个月换一批，记住这些“家族名”就够了。真想知道谁强，别信排行榜，拿你自己的活让它们各干一遍最准。</p>
+          <p>还有一点容易混：上面那些 Agent 里，很多是编辑器 / IDE 插件（Cursor、Copilot 这类），DeepSeek Harness 是单独的桌面程序——不写代码也能用。</p>
+        </div>
+      </details>
+    </section>
+
+    <!-- 1 -->
+    <section class="card" id="s1">
+      <h2 class="sec"><span class="num">1</span>安装前的准备</h2>
+      <ol class="steps">
+        <li>确认系统是 64 位 Windows 10 或更高：按 <code class="inl">Win + Pause</code>，看"系统类型"那行写着"64 位操作系统"就对了。</li>
+        <li>腾出大约 2 GB 硬盘空间。</li>
+        <li>电脑连着网。</li>
+        <li>手机放手边——注册要收短信验证码，或者用微信扫码。</li>
+      </ol>
+      <figure>
+        <img loading="lazy" decoding="async" src="img/01-系统类型.png" alt="Win+Pause 打开的系统信息页">
+        <figcaption>截图01：系统信息页里"系统类型"的位置</figcaption>
+      </figure>
+    </section>
+
+    <!-- 2 -->
+    <section class="card" id="s2">
+      <h2 class="sec"><span class="num">2</span>下载</h2>
+      <ol class="steps">
+        <li>打开浏览器（Edge 或 Chrome 都行），地址栏输入 <code class="inl">www.deepseek.com/download/</code> 回车。</li>
+        <li>往下找 <b>DeepSeek Harness</b> 那一块，点 <b>下载适用于 Windows 版本</b>（按钮上会写 Windows / x64）。</li>
+        <li>浏览器开始下载一个 <code class="inl">.exe</code> 文件，名字类似 <code class="inl">deepseek-harness-0.2.1-rc.3-win-x64.exe</code>，大约 300 MB。</li>
+        <li>下载完按 <code class="inl">Ctrl + J</code> 能看到它，点旁边的"在文件夹中显示"。</li>
+      </ol>
+      <div class="box tip">
+        <span class="t">文件名里有 rc 是正常的</span>
+        表示"预览版"，功能正常，只是还在持续改进，会自动升级。
+      </div>
+      <figure>
+        <img loading="lazy" decoding="async" src="img/02-下载按钮.png" alt="官网下载页的 Windows 下载按钮">
+        <figcaption>截图02：官网下载页，Windows 版本下载按钮</figcaption>
+      </figure>
+      <figure>
+        <img loading="lazy" decoding="async" src="img/03-下载完成.png" alt="浏览器下载完成列表">
+        <figcaption>截图03：浏览器下载列表里的安装包</figcaption>
+      </figure>
+    </section>
+
+    <!-- 3 -->
+    <section class="card" id="s3">
+      <h2 class="sec"><span class="num">3</span>安装</h2>
+      <ol class="steps">
+        <li><b>双击</b>下载好的 exe 文件。</li>
+        <li><b>可能</b>会弹一个蓝色窗口 <b>“Windows 已保护你的电脑”</b>：那就点小字 <b>更多信息</b> → 再点 <b>仍要运行</b>。（官网下的可以放心点。）<b>没弹这个窗口也是正常的</b>——说明系统没拦，直接看下一步，不用找。</li>
+        <li>安装程序打开后：问"为谁安装"就选 <b>仅为我安装</b>；安装路径保持默认别改；点 <b>安装 / Install</b>。</li>
+        <li>进度条走完 → 点 <b>完成</b> / <b>运行 DeepSeek Harness</b>。</li>
+        <li>桌面上会出现图标，右下角托盘（时间旁边的小箭头里）也会有它的图标。</li>
+      </ol>
+      <div class="box warn">
+        <span class="t">双击后没反应？</span>
+        右键那个 exe → <b>以管理员身份运行</b>，再试一次。
+      </div>
+      <figure>
+        <img loading="lazy" decoding="async" src="img/04-安装界面.png" alt="安装程序主界面">
+        <figcaption>截图04：安装程序界面，"仅为我安装"和"安装"按钮</figcaption>
+      </figure>
+    </section>
+
+    <!-- 4 -->
+    <section class="card" id="s4">
+      <h2 class="sec"><span class="num">4</span>注册账户</h2>
+      <p>第一次打开会出现一个<b>欢迎页</b>，上面两个入口：<b>登录</b> 和 <b>添加 API Key</b>。</p>
+      <div class="box tip">
+        <span class="t">新手直接选「登录」</span>
+        不用管什么是 API Key，走下面 4.1 就行。4.2 是给已经会玩 API 的人看的备选。
+      </div>
+
+      <h3 id="s41">4.1 主路径：手机号注册并登录（推荐）</h3>
+      <ol class="steps">
+        <li>欢迎页点 <b>登录</b>。</li>
+        <li>电脑会自动打开浏览器，进入 DeepSeek 开放平台的授权页面。</li>
+        <li>没注册过就点 <b>注册</b>：
+          <ul>
+            <li>输入<b>手机号</b> → 点 <b>获取验证码</b>；</li>
+            <li>手机收到 4~6 位数字短信，填进去；</li>
+            <li>设置密码（8 位以上，字母 + 数字）；</li>
+            <li>勾选同意用户协议 → 点 <b>注册 / 登录</b>。</li>
+            <li>也可以选页面上的 <b>微信扫码</b>，更省事。</li>
+          </ul>
+        </li>
+        <li>登录成功后浏览器会显示"授权成功 / 可以返回应用"，并可能自动跳回客户端。</li>
+        <li>没自动跳回来：回到浏览器那个完成页点 <b>打开客户端</b>；或者直接切回 DeepSeek Harness 窗口。</li>
+        <li>回到客户端后，会先走一遍<b>设置引导</b>（见 4.4），走完就进主界面了。<b>设置 → 账号与余额</b> 里能看到余额。</li>
+      </ol>
+
+      <div class="box warn">
+        <span class="t">一个特别容易误解的地方</span>
+        这里的账号是 <b>DeepSeek 开放平台（platform.deepseek.com）</b> 的账号，不是你手机 App 里聊天用的那个。用同一个手机号登录，但<b>钱包不通用</b>，<b>手机 App 里的聊天记录也不会同步过来</b>——这是正常的，不是出错。
+      </div>
+
+      <figure>
+        <img loading="lazy" decoding="async" src="img/05-欢迎页.png" alt="客户端欢迎页">
+        <figcaption>截图05：欢迎页上的"登录"入口</figcaption>
+      </figure>
+      <figure>
+        <img loading="lazy" decoding="async" src="img/06-注册页.png" alt="开放平台注册页">
+        <figcaption>截图06：注册页的手机号、验证码、注册按钮</figcaption>
+      </figure>
+      <figure>
+        <img loading="lazy" decoding="async" src="img/07-授权成功.png" alt="授权成功页面">
+        <figcaption>截图07：授权成功页的"打开客户端"</figcaption>
+      </figure>
+
+      <h3 id="s42">4.2 附注：想用 API Key 的看这里</h3>
+      <p>适用情况：你已经在用 DeepSeek API，或者手上有别人给的密钥。</p>
+      <ol class="steps">
+        <li>浏览器打开 <code class="inl">platform.deepseek.com</code>，用手机号登录。</li>
+        <li>左侧菜单点 <b>API Keys</b> → <b>创建 API Key</b> → 起个名（比如 <code class="inl">my-pc</code>）→ 创建。</li>
+        <li>页面显示一串以 <code class="inl">sk-</code> 开头的字符。<b>它只显示这一次</b>，点"复制"立刻存到记事本里。</li>
+        <li>回到客户端欢迎页点 <b>添加 API Key</b>，粘贴进去 → <b>保存并继续</b>。</li>
+      </ol>
+      <div class="box danger">
+        <span class="t">密钥就等于银行卡密码</span>
+        别发群里、别贴到网上、别让它出现在截图里。泄露了别人就能花你的钱。
+      </div>
+
+      <h3 id="s43">4.3 暂时不想登录</h3>
+      <p>欢迎页上有 <b>稍后配置</b>，可以先看看界面。但只要有任务要调用模型，就必须先配好账号或密钥，否则会报错。</p>
+
+      <h3 id="s44">4.4 第一次进客户端：跟着设置引导走一遍</h3>
+      <p>授权成功、第一次进客户端时，会自动出现一个<b>设置引导</b>，一共五屏，一屏点一次 <b>下一步 / 继续</b>，走完就进主界面了。</p>
+      <ol class="steps">
+        <li>前面几屏是说明和基本设置，看着点「下一步」就行。</li>
+        <li>如果某一屏让你选<b>工作区文件夹</b>，先选个空文件夹——比如在桌面上新建一个 <code class="inl">AI 工作区</code>。<b>别一上来就选整个 C 盘或“文档”</b>（第 6 节细讲）。</li>
+        <li>有一屏上就有 <b>充值</b> 按钮（截图 10）。新账号余额是 0，<b>直接在这儿点进去充</b>，比单独去网页少走一步，详细步骤见第 5 节。</li>
+        <li>有一屏需要你做一个选择（截图 11），按自己的需要选，选完点「下一步」。</li>
+        <li>看到主界面（引导第 5 屏，截图 12）就说明配置完了，可以开始用。
+          <br>引导只弹这一次，以后想改设置就去 <b>设置</b> 里改，选错了不用重来。
+        </li>
+      </ol>
+      <figure>
+        <img loading="lazy" decoding="async" src="img/08-引导1.png" alt="设置引导第 1 屏">
+        <figcaption>截图08：引导 1／5</figcaption>
+      </figure>
+      <figure>
+        <img loading="lazy" decoding="async" src="img/09-引导2.png" alt="设置引导第 2 屏">
+        <figcaption>截图09：引导 2／5</figcaption>
+      </figure>
+      <figure>
+        <img loading="lazy" decoding="async" src="img/10-引导3-充值.png" alt="设置引导第 3 屏，带充值按钮">
+        <figcaption>截图10：引导 3／5——新账号余额是 0，就在这一屏点「充值」</figcaption>
+      </figure>
+      <figure>
+        <img loading="lazy" decoding="async" src="img/11-引导4.png" alt="设置引导第 4 屏，需要做一个选择">
+        <figcaption>截图11：引导 4／5——这里需要你做一个选择</figcaption>
+      </figure>
+      <figure>
+        <img loading="lazy" decoding="async" src="img/12-引导5.png" alt="设置引导走完，进入主界面">
+        <figcaption>截图12：引导 5／5——走完就进主界面了</figcaption>
+      </figure>
+    </section>
+
+    <!-- 5 -->
+    <section class="card" id="s5">
+      <h2 class="sec"><span class="num">5</span>充值（关键一步）</h2>
+      <p>登录后余额通常是 0，或者只有一点赠金——<b>这时候还干不了活，得自己充钱</b>。两条路效果一样：<b>在客户端里点</b>（5.1，推荐），或者<b>去网页充值</b>（5.2）。钱充进的是同一个账户，用哪个都行。</p>
+
+      <h3 id="s51">5.1 在客户端里充值（推荐）</h3>
+      <ol class="steps">
+        <li>打开 DeepSeek Harness，点窗口<b>左下角</b>自己账号那一行（显示手机号，比如 <code class="inl">136******10</code>）。</li>
+        <li>弹出<b>设置</b>窗口，左侧菜单点 <b>账号与余额</b>。</li>
+        <li>右侧上方是账号卡片：<b>已登录 DeepSeek</b> + 手机号；右边有 <b>更多账号信息 ↗</b>，想看网页端的账户详情就从这儿跳。</li>
+        <li>下面一张卡片写着 <b>充值余额</b> 和当前金额（新账号是 <code class="inl">¥0.00</code>）。点右下的 <b>充值</b> 按钮（截图 13 红框）。</li>
+        <li>浏览器会打开开放平台的收银台，从下面 5.2 的<b>第 3 步</b>接着做（选金额 → 扫码付款）。</li>
+        <li>付完切回客户端，<b>设置 → 账号与余额</b> 里的 <b>充值余额</b> 数字变了就成功了；没变就退出客户端重新打开。</li>
+      </ol>
+      <div class="box tip">
+        <span class="t">同一张卡片上还有两个按钮</span>
+        <b>查询用量</b> 看已经花了多少、每次任务扣了多少；<b>更多账号信息 ↗</b> 跳到网页端看账单、改绑手机、查发票。余额和用量都能在里面看清楚。
+      </div>
+      <figure>
+        <img loading="lazy" decoding="async" src="img/13-客户端充值入口.png" alt="客户端左下角账号 → 设置 → 账号与余额，红框标出充值按钮">
+        <figcaption>截图13：客户端「设置 → 账号与余额」，红框处就是<b>充值</b>按钮（左下角红框是打开设置的入口）</figcaption>
+      </figure>
+      <figure>
+        <img loading="lazy" decoding="async" src="img/14-充值支付.png" alt="充值页面，金额选择与支付宝 / 微信支付">
+        <figcaption>截图14：点了「充值」后浏览器打开的收银台——选金额，再用支付宝 / 微信扫码</figcaption>
+      </figure>
+
+      <h3 id="s52">5.2 在网页里充值</h3>
+      <ol class="steps">
+        <li>浏览器打开 <code class="inl">platform.deepseek.com</code>，确认已登录（就是第 4 步注册的那个账号）。</li>
+        <li>左侧菜单点 <b>充值</b>（有的界面叫"充值中心""账户余额"）。</li>
+        <li>选金额。<b>第一次充 10 元就够试很久</b>；只想试试手，充 1 元也行。</li>
+        <li>支付方式选 <b>支付宝</b> 或 <b>微信支付</b>。</li>
+        <li>弹出二维码 → 用手机上的支付宝/微信 <b>扫一扫</b> → 确认付款。</li>
+        <li>付完回网页看余额，没变就按 <code class="inl">F5</code> 刷新。</li>
+        <li>回到 DeepSeek Harness，<b>设置 → 账号与余额</b> 里的 <b>充值余额</b> 数字变了就成功；还是旧的就退出客户端重新打开。</li>
+      </ol>
+
+      <h3>关于花费</h3>
+      <ul>
+        <li>分 <b>空闲时段</b> 和 <b>高峰时段</b> 两档价，<b>高峰单价是空闲的 2 倍</b>。具体数字见下面的价格表。</li>
+        <li>用多少扣多少，不用不扣；余额快没了会提示。</li>
+        <li>怕花超：小额充、用完再充，最稳。</li>
+      </ul>
+
+      <h3>看花了多少钱：用量信息页</h3>
+      <p>客户端「设置 → 账号与余额」→ <b>查询用量</b>，会打开开放平台的 <code class="inl">platform.deepseek.com/usage</code> <b>用量信息</b> 页：</p>
+      <ul>
+        <li>最上面两块数字：<b>充值余额</b>（旁边有「去充值」）和 <b>累计消费金额</b>；余额预警可以点「去设置」开。</li>
+        <li>下面按 <b>时间维度</b>（今天 / 本月 …）和 <b>API Key</b> 筛选，看 <b>消费金额</b>、<b>API 请求次数</b>、<b>Tokens</b> 三个汇总，以及下面的柱状图；右上角可以 <b>导出</b>。</li>
+        <li>按模型分组的图能看出是 flash 还是 v4-pro 花得多。</li>
+      </ul>
+      <figure>
+        <img loading="lazy" decoding="async" src="img/15-用量信息.png" alt="开放平台用量信息页，左下角红框为产品定价入口">
+        <figcaption>截图15：用量信息页——余额、累计消费、请求次数和 Token 图；左下角红框是<b>产品定价</b></figcaption>
+      </figure>
+
+      <h3>看单价：模型 &amp; 价格</h3>
+      <p>用量信息页左下角点 <b>产品定价</b>，会打开 API 文档的「模型 &amp; 价格」页。表里按<b>“百万 tokens”</b>为单位列单价，每个模型下面分 <b>空闲时段</b> / <b>高峰时段</b> 两行（截图 16 红框）。以“百万 tokens 输入（缓存命中）”为例：</p>
+      <div class="tbl-wrap">
+        <table>
+          <thead><tr><th>模型</th><th>空闲时段</th><th>高峰时段</th></tr></thead>
+          <tbody>
+            <tr><td>deepseek-flash</td><td>0.02 元</td><td>0.04 元</td></tr>
+            <tr><td>deepseek-v4-pro</td><td>0.15 元</td><td>0.30 元</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p>同一个表里还列了各模型的版本、上下文长度、功能和<b>输出单价</b>。数字会随版本调整，<b>以页面上的为准</b>。</p>
+      <figure>
+        <img loading="lazy" decoding="async" src="img/16-模型价格.png" alt="API 文档的模型 &amp; 价格页，红框内为空闲 / 高峰单价">
+        <figcaption>截图16：模型 &amp; 价格页，红框里就是空闲 / 高峰两档单价（单位：元 / 百万 tokens）</figcaption>
+      </figure>
+
+      <div class="box warn">
+        <span class="t">充了钱余额还是 0？</span>
+        ① 先按 <code class="inl">F5</code> 刷新 / 重新打开设置窗口；② 确认充的是<b>开放平台账号</b>（和客户端里显示的手机号一致），不是聊天 App 的账号；③ 支付宝 / 微信显示付款成功但页面没更新，等一两分钟再看，不要重复付款。
+      </div>
+    </section>
+
+    <!-- 6 -->
+    <section class="card" id="s6">
+      <h2 class="sec"><span class="num">6</span>第一次使用</h2>
+      <ol class="steps">
+        <li>先给它指定一个<b>工作区</b>（允许它读写的文件夹）。点 <b>选择文件夹 / 添加工作区</b>，比如在桌面新建一个 <code class="inl">AI 工作区</code> 选它。
+          <br><b>不要一上来就把整个 C 盘或"文档"交给它</b>，先用空文件夹熟悉。
+        </li>
+        <li>在输入框发一句话（截图 18），比如："帮我在当前文件夹里新建一个 hello.txt，写一句你好。"</li>
+        <li>它会直接开始干活。如果弹出<b>权限确认</b>（新建文件、运行命令时可能会问），看清它要做什么再点 <b>允许</b>；<b>没弹窗也是正常的</b>——不是没生效，说明这一步不需要额外确认。</li>
+        <li>做完去文件夹看，<code class="inl">hello.txt</code> 是不是真出现了。没看到就按 <code class="inl">F5</code> 刷新一下文件夹。</li>
+      </ol>
+      <div class="box tip">
+        <span class="t">弹性很大，不用纠结</span>
+        弹了权限窗：看不懂的<strong>先点拒绝</strong>，或者直接问它：“你刚才那步是在干什么？”<br>
+        没弹窗：也正常，它只在<b>你给它的工作区文件夹</b>里动手，不会跑到别处去。
+      </div>
+      <figure>
+        <img loading="lazy" decoding="async" src="img/17-主界面.png" alt="客户端主界面">
+        <figcaption>截图17：主界面的工作区选择和输入框</figcaption>
+      </figure>
+      <figure>
+        <img loading="lazy" decoding="async" src="img/18-发送指令.png" alt="在输入框里输入一句话并发送">
+        <figcaption>截图18：在输入框里把要求写清楚，按 <b>Enter</b> 发出去（右下角的圆箭头也能点）</figcaption>
+      </figure>
+    </section>
+
+    <!-- 7 -->
+    <section class="card" id="s7">
+      <h2 class="sec"><span class="num">7</span>日常使用要注意的</h2>
+      <ul>
+        <li><b>点"×"不等于退出。</b> 关窗口只是藏到右下角托盘，任务还在后台跑。找回窗口：点一下托盘里它的图标。</li>
+        <li><b>真正退出</b>：右键托盘图标 → <b>退出</b>。有任务在跑会再问你一次。</li>
+        <li><b>自动更新</b>：它自己下载新版本，下次启动装好。预览版更新较频繁，属正常。</li>
+        <li><b>数据都在本机</b>：会话、设置存在 <code class="inl">%USERPROFILE%\.dsh</code>（客户端菜单里如果有「打开数据目录」之类的入口，点一下就能直接跳过去），别随手删。</li>
+        <li><b>别把密钥、密码、身份证照片发给它</b>，也别让它动你不了解的文件夹。</li>
+        <li>中文输入法打不出字：点一下输入框再试；不行就重启客户端。</li>
+      </ul>
+    </section>
+
+    <!-- 8 -->
+    <section class="card" id="s8">
+      <h2 class="sec"><span class="num">8</span>卸载</h2>
+      <div class="box danger">
+        <span class="t">顺序错了会留残余</span>
+        一定要先做第 2 步（在应用里移除 dsh 命令），再去系统里卸载。只跑卸载程序的话，命令行里会永久残留一个失效的 <code class="inl">dsh</code>。
+      </div>
+      <h3 id="s81">8.1 正确顺序</h3>
+      <ol class="steps">
+        <li>打开 DeepSeek Harness（还没开就先开一下）。</li>
+        <li>菜单里找 <b>管理 dsh 命令…</b>（一般在"检查更新…"下面）→ 点 <b>移除</b>。</li>
+        <li>右键托盘图标 → <b>退出</b>，确保进程真的没了。</li>
+        <li>按 <code class="inl">Win + I</code> 打开设置，再走对应系统的路径：
+          <ul>
+            <li>Windows 11：<b>应用</b> → <b>已安装的应用</b></li>
+            <li>Windows 10：<b>应用</b> → <b>应用和功能</b></li>
+          </ul>
+        </li>
+        <li>搜索框输入 <code class="inl">DeepSeek</code>，找到 <b>DeepSeek Harness</b> → 点右边 <b>⋯</b> → <b>卸载</b>。</li>
+        <li>卸载向导点 <b>卸载 / Uninstall</b>，等走完 → 关闭。</li>
+        <li>再搜一次 <code class="inl">DeepSeek</code>，确认已经没了。</li>
+      </ol>
+      <figure>
+        <img loading="lazy" decoding="async" src="img/19-管理dsh命令.png" alt="菜单里的 管理 dsh 命令 选项">
+        <figcaption>截图19：菜单里的"管理 dsh 命令…"，点进去选"移除"</figcaption>
+      </figure>
+      <figure>
+        <img loading="lazy" decoding="async" src="img/20-卸载向导.png" alt="卸载向导窗口">
+        <figcaption>截图20：卸载向导里的"卸载 / Uninstall"按钮</figcaption>
+      </figure>
+
+      <h3 id="s82">8.2 想彻底清干净（换账号或重装时用）</h3>
+      <p>要删的只有一个文件夹 <code class="inl">.dsh</code>，里面是会话记录、设置和登录凭据。<b>删了要重新登录、重新配置；你在工作区里生成的文件不受影响。</b></p>
+      <div class="path"><code>%USERPROFILE%\.dsh</code><button class="copy">复制</button></div>
+      <ol class="steps">
+        <li>按 <code class="inl">Win + R</code>，输入 <code class="inl">%USERPROFILE%</code> 回车，打开个人文件夹。</li>
+        <li>点窗口上方 <b>查看 → 显示 → 隐藏的项目</b>。它是以点开头的，默认被藏起来。</li>
+        <li>找到 <code class="inl">.dsh</code> 文件夹，右键 → <b>删除</b>。</li>
+      </ol>
+      <p>提示"文件正在使用"：<code class="inl">Ctrl + Shift + Esc</code> 开任务管理器 → 结束 DeepSeek 相关进程，再删。</p>
+      <div class="box tip">
+        <span class="t">没有这个文件夹？</span>
+        说明还没生成过数据，或者早就删了，<b>跳过这一步即可</b>。
+      </div>
+
+      <h3 id="s83">8.3 命令行版是另一套东西</h3>
+      <p>（<b>看不懂就跳过</b>——你没额外装过命令行版的话，这一段跟你无关，不影响卸载。）</p>
+      <p>如果电脑上还有命令行版（<code class="inl">dsh</code> 命令），卸载桌面版不会连带删掉它。想一起清掉，在命令行运行——<b>装过哪个就卸哪个，两个都各跑一次</b>（没装的那个会提示找不到，忽略即可）：</p>
+      <div class="path"><code>npm uninstall -g @deepseek-ai/dsh</code><button class="copy">复制</button></div>
+      <div class="path"><code>npm uninstall -g deepseek-harness-cli</code><button class="copy">复制</button></div>
+    </section>
+
+    <!-- 9 -->
+    <section class="card" id="s9">
+      <h2 class="sec"><span class="num">9</span>常见问题</h2>
+      <p>点一下问题就能展开答案。</p>
+
+      <details><summary>双击安装包没反应 / 一闪而过</summary>
+        <div class="body"><p>多半被安全软件拦了。右键安装包 → <b>以管理员身份运行</b>。仍不行就临时关掉杀毒软件再装，装完马上开回来。</p></div>
+      </details>
+      <details><summary>显示"Windows 已保护你的电脑"</summary>
+        <div class="body"><p>新软件的正常提示，不是中毒。点 <b>更多信息</b> → <b>仍要运行</b>。前提是安装包从官网下的。</p></div>
+      </details>
+      <details><summary>安装到最后报错</summary>
+        <div class="body"><p>常见原因是磁盘满或权限不足。清出 2 GB 空间，右键安装包用管理员身份运行再试。</p></div>
+      </details>
+      <details><summary>登录了还是提示余额不足（报 402 之类）</summary>
+        <div class="body"><p>两种可能：① 没充值；② 登录的是聊天账号，不是开放平台账号。在客户端点左下角账号 → <b>设置 → 账号与余额</b> 看「充值余额」，确实是 0 就点旁边的 <b>充值</b>（第 5 节）；也可以去 <a href="https://platform.deepseek.com/" target="_blank" rel="noopener">platform.deepseek.com</a> 核对。</p></div>
+      </details>
+      <details><summary>网页登录完没跳回客户端</summary>
+        <div class="body"><p>浏览器拦了跳转。回浏览器完成页点 <b>打开客户端</b>；或者直接切回客户端窗口就行。</p></div>
+      </details>
+      <details><summary>找不到客户端窗口</summary>
+        <div class="body"><p>被藏到托盘了。点右下角托盘（时间旁边的小箭头）里的 DeepSeek Harness 图标。</p></div>
+      </details>
+      <details><summary>点卸载时说程序正在运行</summary>
+        <div class="body"><p>只关了窗口，没真退出。右键托盘图标 → <b>退出</b>；再到任务管理器确认没有 DeepSeek 进程。</p></div>
+      </details>
+      <details><summary>已经卸载了，命令行里的 dsh 还残留 / 报错</summary>
+        <div class="body"><p>说明卸载时跳过了「管理 dsh 命令 → 移除」。在命令行运行 <code class="inl">where dsh</code>，它会列出残留路径（一般在 <code class="inl">%LOCALAPPDATA%\Programs\</code> 下，或 npm 全局目录 <code class="inl">npm root -g</code> 里）。把那个 <code class="inl">dsh.cmd</code> / <code class="inl">dsh.exe</code> 删掉即可，<b>别把整个文件夹都删了</b>。如果提示"找不到命令"，说明本来就清干净了，不用管。</p></div>
+      </details>
+      <details><summary>卡住不动 / 一直转圈</summary>
+        <div class="body"><p>网络或服务端问题。退出客户端重开；还不行就重启电脑再试。</p></div>
+      </details>
+      <details><summary>更新之后打不开了</summary>
+        <div class="body"><p>预览版偶发问题。去官网重新下载最新安装包装一遍——会覆盖程序，你的数据还在。</p></div>
+      </details>
+      <details><summary>它会不会把我的文件删掉 / 传走？</summary>
+        <div class="body"><p>它只能操作你给它指定的工作区文件夹，跑不出这个范围。新建、修改、跑命令这类动作通常先问你（有的设置下不弹，就直接做了），所以<b>工作区选小一点</b>就是最实在的保护：别一上来就把整个 C 盘交给它。看不懂的动作先点拒绝。重要文件先备份，是永远的保险。</p></div>
+      </details>
+    </section>
+
+    <!-- 10 -->
+    <section class="card" id="s10">
+      <h2 class="sec"><span class="num">10</span>一页速查</h2>
+      <div class="tbl-wrap">
+        <table>
+          <thead><tr><th>我要做什么</th><th>去哪里</th></tr></thead>
+          <tbody>
+            <tr><td>下载安装包</td><td><a href="https://www.deepseek.com/download/" target="_blank" rel="noopener">www.deepseek.com/download/</a></td></tr>
+            <tr><td>看功能介绍</td><td><a href="https://www.deepseek.com/harness/" target="_blank" rel="noopener">www.deepseek.com/harness/</a></td></tr>
+            <tr><td>充值</td><td>客户端左下角账号 → 设置 → 账号与余额 → 「充值」；或 <a href="https://platform.deepseek.com/" target="_blank" rel="noopener">platform.deepseek.com</a></td></tr>
+            <tr><td>注册 / 看余额 / 查用量</td><td>客户端「设置 → 账号与余额」，或 <a href="https://platform.deepseek.com/" target="_blank" rel="noopener">platform.deepseek.com</a></td></tr>
+            <tr><td>看花了多少钱</td><td>客户端「设置 → 账号与余额」→「查询用量」，或 <a href="https://platform.deepseek.com/usage" target="_blank" rel="noopener">platform.deepseek.com/usage</a></td></tr>
+            <tr><td>看单价</td><td>用量信息页左下角「产品定价」→ 模型 &amp; 价格（空闲 / 高峰）</td></tr>
+            <tr><td>找回被藏起来的窗口</td><td>点右下角托盘里的图标</td></tr>
+            <tr><td>彻底退出</td><td>右键托盘图标 → 退出</td></tr>
+            <tr><td>卸载</td><td>先「管理 dsh 命令 → 移除」，再从「设置 → 应用」卸载</td></tr>
+            <tr><td>数据在哪</td><td><code class="inl">%USERPROFILE%\.dsh</code>（隐藏文件夹，删前先看 8.2）</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <footer>
+      本教程按 DeepSeek Harness 0.2.1-rc.3 编写 · 预览版界面可能随版本调整，按钮文字以实际为准
+    </footer>
+  </main>
+</div>
+
+<script>
+(function () {
+  // 图片缺失时显示占位框
+  document.querySelectorAll('figure img').forEach(function (img) {
+    function fail() {
+      var name = img.getAttribute('src');
+      var cap = img.parentElement.querySelector('figcaption');
+      var box = document.createElement('div');
+      box.className = 'img-missing';
+      box.innerHTML = '<b>此处放截图</b><span>' + name + '</span>' +
+        '<span style="color:#6b7480">把图片存成这个名字放进 img 文件夹即可自动显示</span>';
+      img.replaceWith(box);
+      if (cap) { cap.style.color = 'var(--ink-3)'; }
+    }
+    if (img.complete && img.naturalWidth === 0) { fail(); return; }
+    img.addEventListener('error', fail);
+  });
+
+  // 复制按钮
+  document.querySelectorAll('.copy').forEach(function (btn) {
+    btn.addEventListener('click', function () {
+      var text = btn.parentElement.querySelector('code').textContent;
+      function done() {
+        btn.textContent = '已复制';
+        btn.classList.add('done');
+        setTimeout(function () { btn.textContent = '复制'; btn.classList.remove('done'); }, 1600);
+      }
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(text).then(done, fallback);
+      } else { fallback(); }
+      function fallback() {
+        var ta = document.createElement('textarea');
+        ta.value = text;
+        ta.style.position = 'fixed';
+        ta.style.opacity = '0';
+        document.body.appendChild(ta);
+        ta.select();
+        try { document.execCommand('copy'); done(); } catch (e) { alert('复制失败，请手动选中复制：' + text); }
+        document.body.removeChild(ta);
+      }
+    });
+  });
+
+  // 移动端目录折叠
+  var tocEl = document.getElementById('toc');
+  var tocBtn = tocEl && tocEl.querySelector('.toc-toggle');
+  if (tocBtn) {
+    tocBtn.addEventListener('click', function () {
+      var open = tocEl.classList.toggle('open');
+      tocBtn.setAttribute('aria-expanded', open ? 'true' : 'false');
+    });
+    Array.prototype.forEach.call(tocEl.querySelectorAll('.toc-list a'), function (a) {
+      a.addEventListener('click', function () {
+        tocEl.classList.remove('open');
+        tocBtn.setAttribute('aria-expanded', 'false');
+      });
+    });
+  }
+
+  // 目录高亮
+  var links = Array.prototype.slice.call(document.querySelectorAll('.toc a'));
+  var map = {};
+  links.forEach(function (a) { map[a.getAttribute('href').slice(1)] = a; });
+  var targets = Object.keys(map).map(function (id) { return document.getElementById(id); }).filter(Boolean);
+  if ('IntersectionObserver' in window && targets.length) {
+    var visible = [];
+    var io = new IntersectionObserver(function (entries) {
+      entries.forEach(function (en) {
+        var i = visible.indexOf(en.target.id);
+        if (en.isIntersecting) {
+          if (i === -1) { visible.push(en.target.id); }
+        } else if (i !== -1) {
+          visible.splice(i, 1);
+        }
+      });
+      // 取文档顺序里最靠后的可见区块，滚过子项后能自动回退到父项
+      var current = null;
+      targets.forEach(function (t) {
+        if (visible.indexOf(t.id) !== -1) { current = t.id; }
+      });
+      links.forEach(function (a) { a.classList.remove('active'); });
+      if (current && map[current]) { map[current].classList.add('active'); }
+    }, { rootMargin: '-10% 0px -70% 0px', threshold: 0 });
+    targets.forEach(function (t) { io.observe(t); });
+  }
+})();
+</script>
+</body>
+</html>
