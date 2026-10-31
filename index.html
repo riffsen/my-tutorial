@@ -61,6 +61,23 @@
   .toc .sub{padding-left:20px;font-size:13px;color:var(--ink-3)}
   .toc-toggle{display:none}
 
+  /* 系统切换 */
+  .os-switch{
+    display:flex;gap:4px;background:#eef1f6;border:1px solid var(--line);
+    border-radius:999px;padding:4px;margin:0 0 14px;
+  }
+  .os-switch button{
+    flex:1 1 0;border:0;background:transparent;border-radius:999px;padding:7px 8px;
+    font:inherit;font-size:13.5px;font-weight:600;color:var(--ink-3);
+    cursor:pointer;line-height:1.2;white-space:nowrap;
+  }
+  .os-switch button:hover{color:var(--brand)}
+  .os-switch button[aria-pressed="true"]{background:#fff;color:var(--brand);box-shadow:0 1px 2px rgba(16,24,40,.12)}
+  .os-switch button:focus-visible{outline:2px solid var(--brand);outline-offset:1px}
+  /* 按系统隐藏另一套内容 */
+  html[data-os="win"] [data-os="mac"],
+  html[data-os="mac"] [data-os="win"]{display:none !important}
+
   main{flex:1 1 auto;min-width:0}
 
   header.hero{
@@ -197,12 +214,29 @@
     a{color:var(--ink)}
   }
 </style>
+<script>
+/* 尽早定下系统，避免先闪一下另一套内容 */
+(function () {
+  var KEY = 'dsh-tut-os', os = null;
+  try { os = new URLSearchParams(location.search).get('os'); } catch (e) {}
+  if (os !== 'win' && os !== 'mac') { try { os = localStorage.getItem(KEY); } catch (e) {} }
+  if (os !== 'win' && os !== 'mac') {
+    var ua = navigator.userAgent || '', pf = navigator.platform || '';
+    os = (/Macintosh|Mac OS X/i.test(ua) || /^Mac/i.test(pf)) ? 'mac' : 'win';
+  }
+  document.documentElement.setAttribute('data-os', os);
+})();
+</script>
 </head>
 <body>
 <a class="skip" href="#main">跳到正文</a>
 <div class="wrap">
 
   <nav class="toc" id="toc" aria-label="页面目录">
+    <div class="os-switch" role="group" aria-label="选择操作系统">
+      <button type="button" data-set-os="win" aria-pressed="false">Windows</button>
+      <button type="button" data-set-os="mac" aria-pressed="false">macOS</button>
+    </div>
     <h2>目录</h2>
     <button class="toc-toggle" type="button" aria-expanded="false" aria-controls="toc-list">目录</button>
     <div class="toc-list" id="toc-list">
@@ -232,9 +266,10 @@
   <main id="main">
     <header class="hero">
       <h1>DeepSeek Harness 桌面版<br>安装与使用教程</h1>
-      <p>跟着一步一步点就行，不需要懂电脑。</p>
+      <p>按顺序做一遍就行，每一步都写清楚了该点哪里。</p>
       <div class="meta">
-        <span class="chip">适用：Windows 10 / 11（64 位）</span>
+        <span class="chip" data-os="win">适用：Windows 10 / 11（64 位）</span>
+        <span class="chip" data-os="mac">适用：macOS 12 或更高（Apple 芯片 / Intel）</span>
         <span class="chip">软件版本：0.2.1-rc.3</span>
         <span class="chip">全程约 15 分钟</span>
         <span class="chip">更新：2026-10-28</span>
@@ -279,7 +314,7 @@
 
       <div class="box tip">
         <span class="t">太长不看版</span>
-        官网下载 → 双击装 → 打开后点「登录」→ 手机号注册 → 点左下角账号 → <b>设置 → 账号与余额 → 充值</b> 充 10 元 → 回客户端选个文件夹 → 发一句话试试。
+        官网下载 → <span data-os="win">双击安装包</span><span data-os="mac">双击 dmg，把图标拖进「应用程序」</span> → 打开后点「登录」→ 手机号注册 → 点左下角账号 → <b>设置 → 账号与余额 → 充值</b> 充 10 元 → 回客户端选个文件夹 → 发一句话试试。
       </div>
 
       <details>
@@ -297,57 +332,97 @@
     <section class="card" id="s1">
       <h2 class="sec"><span class="num">1</span>安装前的准备</h2>
       <ol class="steps">
-        <li>确认系统是 64 位 Windows 10 或更高：按 <code class="inl">Win + Pause</code>，看"系统类型"那行写着"64 位操作系统"就对了。</li>
+        <li data-os="win">确认系统是 64 位 Windows 10 或更高：按 <code class="inl">Win + Pause</code>，看"系统类型"那行写着"64 位操作系统"就对了。</li>
+        <li data-os="mac">确认版本和芯片：点屏幕左上角的 <b>苹果菜单 → 关于本机</b>，看「芯片」那一行——写 <b>Apple M…</b> 就是 Apple 芯片（arm64），写 <b>Intel Core…</b> 就是 Intel 芯片（x64）；顺便确认 macOS 是 12 或更高。</li>
         <li>腾出大约 2 GB 硬盘空间。</li>
         <li>电脑连着网。</li>
         <li>手机放手边——注册要收短信验证码，或者用微信扫码。</li>
       </ol>
-      <figure>
+      <figure data-os="win">
         <img loading="lazy" decoding="async" src="img/01-系统类型.png" alt="Win+Pause 打开的系统信息页">
         <figcaption>截图01：系统信息页里"系统类型"的位置</figcaption>
+      </figure>
+      <figure data-os="mac">
+        <img loading="lazy" decoding="async" src="img/mac/01-关于本机.png" alt="苹果菜单 → 关于本机，看芯片那一行">
+        <figcaption>Mac 截图 1：苹果菜单 → 关于本机，看「芯片」那一行</figcaption>
       </figure>
     </section>
 
     <!-- 2 -->
     <section class="card" id="s2">
       <h2 class="sec"><span class="num">2</span>下载</h2>
-      <ol class="steps">
+      <ol class="steps" data-os="win">
         <li>打开浏览器（Edge 或 Chrome 都行），地址栏输入 <code class="inl">www.deepseek.com/download/</code> 回车。</li>
         <li>往下找 <b>DeepSeek Harness</b> 那一块，点 <b>下载适用于 Windows 版本</b>（按钮上会写 Windows / x64）。</li>
         <li>浏览器开始下载一个 <code class="inl">.exe</code> 文件，名字类似 <code class="inl">deepseek-harness-0.2.1-rc.3-win-x64.exe</code>，大约 300 MB。</li>
         <li>下载完按 <code class="inl">Ctrl + J</code> 能看到它，点旁边的"在文件夹中显示"。</li>
       </ol>
+      <ol class="steps" data-os="mac">
+        <li>打开浏览器（Safari、Chrome、Edge 都行），地址栏输入 <code class="inl">www.deepseek.com/download/</code> 回车。</li>
+        <li>往下找 <b>DeepSeek Harness</b> 那一块，点 <b>下载适用于 macOS 版本</b>（按钮上会写 macOS / Apple 芯片）。</li>
+        <li>官网如果给了两个 Mac 包，按第 1 步查到的芯片选：<b>Apple 芯片</b>选 arm64 / Apple Silicon，<b>Intel</b> 选 x64 / Intel。选错了打开时会提示不支持这台 Mac。</li>
+        <li>浏览器开始下载一个 <code class="inl">.dmg</code> 文件，名字类似 <code class="inl">deepseek-harness-0.2.1-rc.3-mac-arm64.dmg</code>，大约 300 MB。</li>
+        <li>找文件：Safari 点右上角下载按钮（↓ 箭头），Chrome 按 <code class="inl">⌘ + ⇧ + J</code>；文件都在「下载」文件夹里。只想看看文件本身：在访达里按 <code class="inl">⌥ + ⌘ + L</code> 直接打开「下载」。</li>
+      </ol>
       <div class="box tip">
         <span class="t">文件名里有 rc 是正常的</span>
         表示"预览版"，功能正常，只是还在持续改进，会自动升级。
       </div>
-      <figure>
+      <figure data-os="win">
         <img loading="lazy" decoding="async" src="img/02-下载按钮.png" alt="官网下载页的 Windows 下载按钮">
         <figcaption>截图02：官网下载页，Windows 版本下载按钮</figcaption>
       </figure>
-      <figure>
+      <figure data-os="win">
         <img loading="lazy" decoding="async" src="img/03-下载完成.png" alt="浏览器下载完成列表">
         <figcaption>截图03：浏览器下载列表里的安装包</figcaption>
+      </figure>
+      <figure data-os="mac">
+        <img loading="lazy" decoding="async" src="img/mac/02-下载按钮.png" alt="官网下载页的 macOS 下载按钮">
+        <figcaption>Mac 截图 2：官网下载页，macOS 版本下载按钮（注意选对芯片）</figcaption>
+      </figure>
+      <figure data-os="mac">
+        <img loading="lazy" decoding="async" src="img/mac/03-下载完成.png" alt="下载完成的 dmg 文件">
+        <figcaption>Mac 截图 3：下载好的 .dmg 文件</figcaption>
       </figure>
     </section>
 
     <!-- 3 -->
     <section class="card" id="s3">
       <h2 class="sec"><span class="num">3</span>安装</h2>
-      <ol class="steps">
+      <ol class="steps" data-os="win">
         <li><b>双击</b>下载好的 exe 文件。</li>
         <li><b>可能</b>会弹一个蓝色窗口 <b>“Windows 已保护你的电脑”</b>：那就点小字 <b>更多信息</b> → 再点 <b>仍要运行</b>。（官网下的可以放心点。）<b>没弹这个窗口也是正常的</b>——说明系统没拦，直接看下一步，不用找。</li>
         <li>安装程序打开后：问"为谁安装"就选 <b>仅为我安装</b>；安装路径保持默认别改；点 <b>安装 / Install</b>。</li>
         <li>进度条走完 → 点 <b>完成</b> / <b>运行 DeepSeek Harness</b>。</li>
         <li>桌面上会出现图标，右下角托盘（时间旁边的小箭头里）也会有它的图标。</li>
       </ol>
-      <div class="box warn">
+      <ol class="steps" data-os="mac">
+        <li><b>双击</b>下载好的 <code class="inl">.dmg</code> 文件，会弹出一个窗口，里面是 DeepSeek Harness 图标和「应用程序」文件夹的快捷方式。</li>
+        <li>把 DeepSeek Harness 图标<b>拖进「应用程序」文件夹</b>，等几秒复制完。然后把左边 dmg 名字后面的 ⏏ 点一下（弹出），免得它一直挂在桌面上。</li>
+        <li>打开「访达 → 应用程序」，<b>双击 DeepSeek Harness</b> 启动。第一次启动慢一点是正常的。</li>
+        <li>第一次启动<b>很可能被系统拦住</b>：弹窗说“无法打开，因为 Apple 无法验证”。点 <b>好 / 完成</b> → 打开 <b>系统设置 → 隐私与安全性</b> → 往下滚，找到“…已被阻止使用”那一行 → 点 <b>仍要打开</b> → 输入电脑密码或按 Touch ID。<b>只有第一次要这么做。</b>（也可以在「应用程序」里按住 <code class="inl">Control</code> 点图标 → 选「打开」。）</li>
+        <li>如果它问能不能访问「桌面 / 文稿 / 下载」文件夹，<b>按需点允许</b>就行；它真正干活的范围还是第 6 步你指定的工作区文件夹。</li>
+        <li>启动成功后，屏幕<b>右上角菜单栏</b>会出现它的图标，Dock 里也会有一个。想以后好找：右键 Dock 图标 → <b>选项 → 在 Dock 中保留</b>。</li>
+      </ol>
+      <div class="box warn" data-os="mac">
+        <span class="t">拖不进「应用程序」，或者提示“已损坏，无法打开”？</span>
+        ① 先确认 dmg 是从官网下的，别用网盘版本；② 打开「终端」（<code class="inl">⌘ + 空格</code> 搜“终端”回车），粘贴运行 <code class="inl">xattr -dr com.apple.quarantine "/Applications/DeepSeek Harness.app"</code> 回车，再双击打开。（会要求输开机密码，输入时屏幕不显示字符是正常的。）
+      </div>
+      <div class="box warn" data-os="win">
         <span class="t">双击后没反应？</span>
         右键那个 exe → <b>以管理员身份运行</b>，再试一次。
       </div>
-      <figure>
+      <figure data-os="win">
         <img loading="lazy" decoding="async" src="img/04-安装界面.png" alt="安装程序主界面">
         <figcaption>截图04：安装程序界面，"仅为我安装"和"安装"按钮</figcaption>
+      </figure>
+      <figure data-os="mac">
+        <img loading="lazy" decoding="async" src="img/mac/04-拖入应用程序.png" alt="dmg 窗口里把图标拖进应用程序文件夹">
+        <figcaption>Mac 截图 4：把图标拖进「应用程序」文件夹</figcaption>
+      </figure>
+      <figure data-os="mac">
+        <img loading="lazy" decoding="async" src="img/mac/05-无法验证开发者.png" alt="系统设置 → 隐私与安全性 里的“仍要打开”">
+        <figcaption>Mac 截图 5：第一次打开被拦时，去「隐私与安全性」点“仍要打开”</figcaption>
       </figure>
     </section>
 
@@ -355,6 +430,10 @@
     <section class="card" id="s4">
       <h2 class="sec"><span class="num">4</span>注册账户</h2>
       <p>第一次打开会出现一个<b>欢迎页</b>，上面两个入口：<b>登录</b> 和 <b>添加 API Key</b>。</p>
+      <div class="box note" data-os="mac">
+        <span class="t">本节以后的大部分截图来自 Windows 版</span>
+        Mac 上界面功能完全一样，只是窗口左上角是红黄绿三个圆按钮。按钮文字、位置照着对应就行，不用寻找差异。
+      </div>
       <div class="box tip">
         <span class="t">新手直接选「登录」</span>
         不用管什么是 API Key，走下面 4.1 就行。4.2 是给已经会玩 API 的人看的备选。
@@ -416,7 +495,7 @@
       <p>授权成功、第一次进客户端时，会自动出现一个<b>设置引导</b>，一共五屏，一屏点一次 <b>下一步 / 继续</b>，走完就进主界面了。</p>
       <ol class="steps">
         <li>前面几屏是说明和基本设置，看着点「下一步」就行。</li>
-        <li>如果某一屏让你选<b>工作区文件夹</b>，先选个空文件夹——比如在桌面上新建一个 <code class="inl">AI 工作区</code>。<b>别一上来就选整个 C 盘或“文档”</b>（第 6 节细讲）。</li>
+        <li>如果某一屏让你选<b>工作区文件夹</b>，先选个空文件夹——比如在桌面上新建一个 <code class="inl">AI 工作区</code>。<span data-os="win"><b>别一上来就选整个 C 盘或“文档”</b></span><span data-os="mac"><b>别一上来就选整个个人文件夹或“文稿”</b></span>（第 6 节细讲）。</li>
         <li>有一屏上就有 <b>充值</b> 按钮（截图 10）。新账号余额是 0，<b>直接在这儿点进去充</b>，比单独去网页少走一步，详细步骤见第 5 节。</li>
         <li>有一屏需要你做一个选择（截图 11），按自己的需要选，选完点「下一步」。</li>
         <li>看到主界面（引导第 5 屏，截图 12）就说明配置完了，可以开始用。
@@ -479,7 +558,7 @@
         <li>选金额。<b>第一次充 10 元就够试很久</b>；只想试试手，充 1 元也行。</li>
         <li>支付方式选 <b>支付宝</b> 或 <b>微信支付</b>。</li>
         <li>弹出二维码 → 用手机上的支付宝/微信 <b>扫一扫</b> → 确认付款。</li>
-        <li>付完回网页看余额，没变就按 <code class="inl">F5</code> 刷新。</li>
+        <li>付完回网页看余额，没变就<span data-os="win">按 <code class="inl">F5</code></span><span data-os="mac">按 <code class="inl">⌘R</code></span>刷新。</li>
         <li>回到 DeepSeek Harness，<b>设置 → 账号与余额</b> 里的 <b>充值余额</b> 数字变了就成功；还是旧的就退出客户端重新打开。</li>
       </ol>
 
@@ -521,7 +600,7 @@
 
       <div class="box warn">
         <span class="t">充了钱余额还是 0？</span>
-        ① 先按 <code class="inl">F5</code> 刷新 / 重新打开设置窗口；② 确认充的是<b>开放平台账号</b>（和客户端里显示的手机号一致），不是聊天 App 的账号；③ 支付宝 / 微信显示付款成功但页面没更新，等一两分钟再看，不要重复付款。
+        ① 先<span data-os="win">按 <code class="inl">F5</code></span><span data-os="mac">按 <code class="inl">⌘R</code></span>刷新 / 重新打开设置窗口；② 确认充的是<b>开放平台账号</b>（和客户端里显示的手机号一致），不是聊天 App 的账号；③ 支付宝 / 微信显示付款成功但页面没更新，等一两分钟再看，不要重复付款。
       </div>
     </section>
 
@@ -530,11 +609,11 @@
       <h2 class="sec"><span class="num">6</span>第一次使用</h2>
       <ol class="steps">
         <li>先给它指定一个<b>工作区</b>（允许它读写的文件夹）。点 <b>选择文件夹 / 添加工作区</b>，比如在桌面新建一个 <code class="inl">AI 工作区</code> 选它。
-          <br><b>不要一上来就把整个 C 盘或"文档"交给它</b>，先用空文件夹熟悉。
+          <br><span data-os="win"><b>不要一上来就把整个 C 盘或"文档"交给它</b></span><span data-os="mac"><b>不要一上来就把整个个人文件夹或「文稿」交给它</b></span>，先用空文件夹熟悉。
         </li>
         <li>在输入框发一句话（截图 18），比如："帮我在当前文件夹里新建一个 hello.txt，写一句你好。"</li>
         <li>它会直接开始干活。如果弹出<b>权限确认</b>（新建文件、运行命令时可能会问），看清它要做什么再点 <b>允许</b>；<b>没弹窗也是正常的</b>——不是没生效，说明这一步不需要额外确认。</li>
-        <li>做完去文件夹看，<code class="inl">hello.txt</code> 是不是真出现了。没看到就按 <code class="inl">F5</code> 刷新一下文件夹。</li>
+        <li>做完去文件夹看，<code class="inl">hello.txt</code> 是不是真出现了。<span data-os="win">没看到就按 <code class="inl">F5</code> 刷新一下文件夹。</span><span data-os="mac">没看到就在访达里退到上一级再点回来（访达一般会自己刷新）。</span></li>
       </ol>
       <div class="box tip">
         <span class="t">弹性很大，不用纠结</span>
@@ -555,13 +634,20 @@
     <section class="card" id="s7">
       <h2 class="sec"><span class="num">7</span>日常使用要注意的</h2>
       <ul>
-        <li><b>点"×"不等于退出。</b> 关窗口只是藏到右下角托盘，任务还在后台跑。找回窗口：点一下托盘里它的图标。</li>
-        <li><b>真正退出</b>：右键托盘图标 → <b>退出</b>。有任务在跑会再问你一次。</li>
+        <li data-os="win"><b>点"×"不等于退出。</b> 关窗口只是藏到右下角托盘，任务还在后台跑。找回窗口：点一下托盘里它的图标。</li>
+        <li data-os="mac"><b>点左上角红灯（或按 <code class="inl">⌘W</code>）不等于退出。</b> 窗口关掉了，程序还在右上角菜单栏里，任务也还在后台跑。找回窗口：点菜单栏里的图标，或者点 Dock 里的图标。</li>
+        <li data-os="win"><b>真正退出</b>：右键托盘图标 → <b>退出</b>。有任务在跑会再问你一次。</li>
+        <li data-os="mac"><b>真正退出</b>：点右上角菜单栏图标 → <b>退出</b>，或者窗口在前台时按 <code class="inl">⌘Q</code>。有任务在跑会再问你一次。Dock 里图标下面那个小点没了，才算真退了。</li>
         <li><b>自动更新</b>：它自己下载新版本，下次启动装好。预览版更新较频繁，属正常。</li>
-        <li><b>数据都在本机</b>：会话、设置存在 <code class="inl">%USERPROFILE%\.dsh</code>（客户端菜单里如果有「打开数据目录」之类的入口，点一下就能直接跳过去），别随手删。</li>
+        <li data-os="win"><b>数据都在本机</b>：会话、设置存在 <code class="inl">%USERPROFILE%\.dsh</code>（客户端菜单里如果有「打开数据目录」之类的入口，点一下就能直接跳过去），别随手删。</li>
+        <li data-os="mac"><b>数据都在本机</b>：会话、设置存在 <code class="inl">~/.dsh</code>（<code class="inl">~</code> 就是你的个人文件夹；访达里按 <code class="inl">⇧⌘G</code> 输入 <code class="inl">~/.dsh</code> 能直接跳过去），别随手删。</li>
         <li><b>别把密钥、密码、身份证照片发给它</b>，也别让它动你不了解的文件夹。</li>
-        <li>中文输入法打不出字：点一下输入框再试；不行就重启客户端。</li>
+        <li>中文输入法打不出字：点一下输入框再试；不行就重启客户端。<span data-os="mac">如果只是候选框跑到屏幕角落，把客户端窗口拖一下再点回输入框通常就好了。</span></li>
       </ul>
+      <figure data-os="mac">
+        <img loading="lazy" decoding="async" src="img/mac/06-菜单栏图标.png" alt="右上角菜单栏里的图标和退出菜单项">
+        <figcaption>Mac 截图 6：屏幕右上角菜单栏里的图标，菜单里的「退出」</figcaption>
+      </figure>
     </section>
 
     <!-- 8 -->
@@ -569,10 +655,10 @@
       <h2 class="sec"><span class="num">8</span>卸载</h2>
       <div class="box danger">
         <span class="t">顺序错了会留残余</span>
-        一定要先做第 2 步（在应用里移除 dsh 命令），再去系统里卸载。只跑卸载程序的话，命令行里会永久残留一个失效的 <code class="inl">dsh</code>。
+        一定要先做第 2 步（在应用里移除 dsh 命令），再去系统里卸载。只跑卸载程序（Mac 上就是只把应用拖进废纸篓）的话，命令行里会永久残留一个失效的 <code class="inl">dsh</code>。
       </div>
       <h3 id="s81">8.1 正确顺序</h3>
-      <ol class="steps">
+      <ol class="steps" data-os="win">
         <li>打开 DeepSeek Harness（还没开就先开一下）。</li>
         <li>菜单里找 <b>管理 dsh 命令…</b>（一般在"检查更新…"下面）→ 点 <b>移除</b>。</li>
         <li>右键托盘图标 → <b>退出</b>，确保进程真的没了。</li>
@@ -586,32 +672,62 @@
         <li>卸载向导点 <b>卸载 / Uninstall</b>，等走完 → 关闭。</li>
         <li>再搜一次 <code class="inl">DeepSeek</code>，确认已经没了。</li>
       </ol>
-      <figure>
+      <figure data-os="win">
         <img loading="lazy" decoding="async" src="img/19-管理dsh命令.png" alt="菜单里的 管理 dsh 命令 选项">
         <figcaption>截图19：菜单里的"管理 dsh 命令…"，点进去选"移除"</figcaption>
       </figure>
-      <figure>
+      <figure data-os="win">
         <img loading="lazy" decoding="async" src="img/20-卸载向导.png" alt="卸载向导窗口">
         <figcaption>截图20：卸载向导里的"卸载 / Uninstall"按钮</figcaption>
       </figure>
 
+      <ol class="steps" data-os="mac">
+        <li>打开 DeepSeek Harness（还没开就先开一下），让窗口在前台。</li>
+        <li>看屏幕<b>最上面那条菜单栏</b>（Mac 的程序菜单永远在屏幕顶部，不在窗口里），点 <b>DeepSeek Harness</b> → 找 <b>管理 dsh 命令…</b>（一般在“检查更新…”下面）→ 点 <b>移除</b>。</li>
+        <li>按 <code class="inl">⌘Q</code> 退出（或点右上角菜单栏图标 → 退出），确认 Dock 里图标下面那个小点没了。</li>
+        <li>打开「访达」→ 左侧点 <b>应用程序</b> → 找到 <b>DeepSeek Harness</b>。</li>
+        <li>右键（或按住 <code class="inl">Control</code> 点）→ <b>移到废纸篓</b>，需要时输入开机密码。</li>
+        <li>右键 Dock 里的废纸篓 → <b>清倒废纸篓</b>，然后再看一眼「应用程序」确认已经没了。</li>
+      </ol>
+      <figure data-os="mac">
+        <img loading="lazy" decoding="async" src="img/mac/07-管理dsh命令.png" alt="屏幕顶部菜单里的 管理 dsh 命令">
+        <figcaption>Mac 截图 7：屏幕顶部菜单栏 → DeepSeek Harness → “管理 dsh 命令…”，点进去选“移除”</figcaption>
+      </figure>
+      <figure data-os="mac">
+        <img loading="lazy" decoding="async" src="img/mac/08-移到废纸篓.png" alt="应用程序里把 DeepSeek Harness 移到废纸篓">
+        <figcaption>Mac 截图 8：应用程序里右键图标 → “移到废纸篓”</figcaption>
+      </figure>
+
       <h3 id="s82">8.2 想彻底清干净（换账号或重装时用）</h3>
       <p>要删的只有一个文件夹 <code class="inl">.dsh</code>，里面是会话记录、设置和登录凭据。<b>删了要重新登录、重新配置；你在工作区里生成的文件不受影响。</b></p>
-      <div class="path"><code>%USERPROFILE%\.dsh</code><button class="copy">复制</button></div>
-      <ol class="steps">
+      <div class="path" data-os="win"><code>%USERPROFILE%\.dsh</code><button class="copy">复制</button></div>
+      <ol class="steps" data-os="win">
         <li>按 <code class="inl">Win + R</code>，输入 <code class="inl">%USERPROFILE%</code> 回车，打开个人文件夹。</li>
         <li>点窗口上方 <b>查看 → 显示 → 隐藏的项目</b>。它是以点开头的，默认被藏起来。</li>
         <li>找到 <code class="inl">.dsh</code> 文件夹，右键 → <b>删除</b>。</li>
       </ol>
       <p>提示"文件正在使用"：<code class="inl">Ctrl + Shift + Esc</code> 开任务管理器 → 结束 DeepSeek 相关进程，再删。</p>
+
+      <div class="path" data-os="mac"><code>~/.dsh</code><button class="copy">复制</button></div>
+      <ol class="steps" data-os="mac">
+        <li>打开「访达」，按 <code class="inl">⇧⌘G</code>（前往文件夹），输入 <code class="inl">~/.dsh</code> 回车。</li>
+        <li>想用鼠标找：先在访达里按 <code class="inl">⌘ + ⇧ + .</code>（句号）显示隐藏文件，再进个人文件夹（侧边栏那个小房子图标），就能看到 <code class="inl">.dsh</code>。</li>
+        <li>把它拖进废纸篓 → 右键 Dock 里的废纸篓 → <b>清倒废纸篓</b>。</li>
+      </ol>
+      <p data-os="mac">提示“正在使用”：按 <code class="inl">⌥⌘Esc</code> 打开强制退出窗口 → 选中 DeepSeek 相关项 → <b>强制退出</b>，再删。</p>
+      <div class="box note" data-os="mac">
+        <span class="t">想连系统缓存一起清（可选）</span>
+        访达里按 <code class="inl">⇧⌘G</code> 分别打开 <code class="inl">~/Library/Application Support</code>、<code class="inl">~/Library/Caches</code>、<code class="inl">~/Library/Preferences</code>，把名字里带 <code class="inl">DeepSeek</code> / <code class="inl">dsh</code> 的项删掉。<b>只删对得上那几个，别把整个 Library 删了。</b>
+      </div>
       <div class="box tip">
         <span class="t">没有这个文件夹？</span>
         说明还没生成过数据，或者早就删了，<b>跳过这一步即可</b>。
       </div>
 
       <h3 id="s83">8.3 命令行版是另一套东西</h3>
-      <p>（<b>看不懂就跳过</b>——你没额外装过命令行版的话，这一段跟你无关，不影响卸载。）</p>
-      <p>如果电脑上还有命令行版（<code class="inl">dsh</code> 命令），卸载桌面版不会连带删掉它。想一起清掉，在命令行运行——<b>装过哪个就卸哪个，两个都各跑一次</b>（没装的那个会提示找不到，忽略即可）：</p>
+      <p>（<b>用不到可以跳过</b>——没额外装过命令行版的话，这一段跟你无关，不影响卸载。）</p>
+      <p>如果电脑上还有命令行版（<code class="inl">dsh</code> 命令），卸载桌面版不会连带删掉它。<span data-os="win">在“命令提示符”或 PowerShell 里运行</span><span data-os="mac">在「终端」里运行</span>——<b>装过哪个就卸哪个，两个都各跑一次</b>（没装的那个会提示找不到，忽略即可）：</p>
+      <p data-os="mac">先看看它还在不在：<code class="inl">⌘ + 空格</code> 搜“终端”打开，输入 <code class="inl">which dsh</code> 回车。有输出就说明还在，一般在 <code class="inl">/usr/local/bin/dsh</code>；想直接删掉就运行 <code class="inl">sudo rm /usr/local/bin/dsh</code>（会问开机密码）。提示 not found 就说明本来就清干净了。</p>
       <div class="path"><code>npm uninstall -g @deepseek-ai/dsh</code><button class="copy">复制</button></div>
       <div class="path"><code>npm uninstall -g deepseek-harness-cli</code><button class="copy">复制</button></div>
     </section>
@@ -622,37 +738,52 @@
       <p>点一下问题就能展开答案。</p>
 
       <details><summary>双击安装包没反应 / 一闪而过</summary>
-        <div class="body"><p>多半被安全软件拦了。右键安装包 → <b>以管理员身份运行</b>。仍不行就临时关掉杀毒软件再装，装完马上开回来。</p></div>
+        <div class="body"><p data-os="win">多半被安全软件拦了。右键安装包 → <b>以管理员身份运行</b>。仍不行就临时关掉杀毒软件再装，装完马上开回来。</p><p data-os="mac">多半是系统拦的。去 <b>系统设置 → 隐私与安全性</b> 点「仍要打开」；或者在「应用程序」里按住 <code class="inl">Control</code> 点图标 → 「打开」。还不行就是芯片选错了包，重新下对应架构的。</p></div>
       </details>
-      <details><summary>显示"Windows 已保护你的电脑"</summary>
+      <details data-os="win"><summary>显示"Windows 已保护你的电脑"</summary>
         <div class="body"><p>新软件的正常提示，不是中毒。点 <b>更多信息</b> → <b>仍要运行</b>。前提是安装包从官网下的。</p></div>
       </details>
-      <details><summary>安装到最后报错</summary>
+      <details data-os="win"><summary>安装到最后报错</summary>
         <div class="body"><p>常见原因是磁盘满或权限不足。清出 2 GB 空间，右键安装包用管理员身份运行再试。</p></div>
+      </details>
+      <details data-os="mac"><summary>提示"已损坏，无法打开，你应该将它移到废纸篓"</summary>
+        <div class="body"><p>这是 macOS 对未经公证的下载包的限制，<b>不是真的文件坏了</b>。确认包是从官网下的之后，打开「终端」运行：<br><code class="inl">xattr -dr com.apple.quarantine "/Applications/DeepSeek Harness.app"</code><br>再双击打开。（会把整个应用从“网上下载”的标记去掉，需要的话把路径换成你实际的位置。）</p></div>
+      </details>
+      <details data-os="mac"><summary>提示"无法打开，因为 Apple 无法验证"</summary>
+        <div class="body"><p>正常，第一次都会拦。去 <b>系统设置 → 隐私与安全性</b> → 往下滚找到“仍要打开”点一下，输密码或 Touch ID，之后就不会再问了。</p></div>
       </details>
       <details><summary>登录了还是提示余额不足（报 402 之类）</summary>
         <div class="body"><p>两种可能：① 没充值；② 登录的是聊天账号，不是开放平台账号。在客户端点左下角账号 → <b>设置 → 账号与余额</b> 看「充值余额」，确实是 0 就点旁边的 <b>充值</b>（第 5 节）；也可以去 <a href="https://platform.deepseek.com/" target="_blank" rel="noopener">platform.deepseek.com</a> 核对。</p></div>
       </details>
       <details><summary>网页登录完没跳回客户端</summary>
-        <div class="body"><p>浏览器拦了跳转。回浏览器完成页点 <b>打开客户端</b>；或者直接切回客户端窗口就行。</p></div>
+        <div class="body"><p>浏览器拦了跳转。回浏览器完成页点 <b>打开客户端</b>；或者直接切回客户端窗口就行。<span data-os="mac">Mac 上浏览器可能先弹一句“是否允许此网页打开 DeepSeek Harness”，点 <b>允许</b>。</span></p></div>
       </details>
-      <details><summary>找不到客户端窗口</summary>
+      <details data-os="win"><summary>找不到客户端窗口</summary>
         <div class="body"><p>被藏到托盘了。点右下角托盘（时间旁边的小箭头）里的 DeepSeek Harness 图标。</p></div>
       </details>
-      <details><summary>点卸载时说程序正在运行</summary>
+      <details data-os="mac"><summary>找不到客户端窗口</summary>
+        <div class="body"><p>窗口关了但程序还在。点屏幕<b>右上角菜单栏</b>里的图标，或者点 Dock 里的图标（点 Dock 图标没反应就按住几秒看菜单）。</p></div>
+      </details>
+      <details data-os="win"><summary>点卸载时说程序正在运行</summary>
         <div class="body"><p>只关了窗口，没真退出。右键托盘图标 → <b>退出</b>；再到任务管理器确认没有 DeepSeek 进程。</p></div>
       </details>
+      <details data-os="mac"><summary>删不掉应用 / 提示程序正在运行</summary>
+        <div class="body"><p>先按 <code class="inl">⌘Q</code> 真退出；还不行就按 <code class="inl">⌥⌘Esc</code> 打开强制退出窗口，选中 DeepSeek 相关项 → <b>强制退出</b>，再拖到废纸篓。</p></div>
+      </details>
       <details><summary>已经卸载了，命令行里的 dsh 还残留 / 报错</summary>
-        <div class="body"><p>说明卸载时跳过了「管理 dsh 命令 → 移除」。在命令行运行 <code class="inl">where dsh</code>，它会列出残留路径（一般在 <code class="inl">%LOCALAPPDATA%\Programs\</code> 下，或 npm 全局目录 <code class="inl">npm root -g</code> 里）。把那个 <code class="inl">dsh.cmd</code> / <code class="inl">dsh.exe</code> 删掉即可，<b>别把整个文件夹都删了</b>。如果提示"找不到命令"，说明本来就清干净了，不用管。</p></div>
+        <div class="body">
+          <p data-os="win">说明卸载时跳过了「管理 dsh 命令 → 移除」。在命令行运行 <code class="inl">where dsh</code>，它会列出残留路径（一般在 <code class="inl">%LOCALAPPDATA%\Programs\</code> 下，或 npm 全局目录 <code class="inl">npm root -g</code> 里）。把那个 <code class="inl">dsh.cmd</code> / <code class="inl">dsh.exe</code> 删掉即可，<b>别把整个文件夹都删了</b>。如果提示"找不到命令"，说明本来就清干净了，不用管。</p>
+          <p data-os="mac">说明卸载时跳过了「管理 dsh 命令 → 移除」。在「终端」里运行 <code class="inl">which dsh</code>，它会显示残留路径（一般在 <code class="inl">/usr/local/bin/dsh</code>，或 npm 全局目录 <code class="inl">npm root -g</code> 里）。用 <code class="inl">sudo rm</code> 把那个 <code class="inl">dsh</code> 删掉即可，<b>别把整个 bin 目录删了</b>。提示 not found 就说明本来就清干净了。</p>
+        </div>
       </details>
       <details><summary>卡住不动 / 一直转圈</summary>
         <div class="body"><p>网络或服务端问题。退出客户端重开；还不行就重启电脑再试。</p></div>
       </details>
       <details><summary>更新之后打不开了</summary>
-        <div class="body"><p>预览版偶发问题。去官网重新下载最新安装包装一遍——会覆盖程序，你的数据还在。</p></div>
+        <div class="body"><p>预览版偶发问题。去官网重新下载最新安装包装一遍——会覆盖程序，你的数据还在。<span data-os="mac">Mac 上把旧的应用拖到废纸篓，再把新包拖进「应用程序」就行；数据在 <code class="inl">~/.dsh</code>，不会丢。</span></p></div>
       </details>
       <details><summary>它会不会把我的文件删掉 / 传走？</summary>
-        <div class="body"><p>它只能操作你给它指定的工作区文件夹，跑不出这个范围。新建、修改、跑命令这类动作通常先问你（有的设置下不弹，就直接做了），所以<b>工作区选小一点</b>就是最实在的保护：别一上来就把整个 C 盘交给它。看不懂的动作先点拒绝。重要文件先备份，是永远的保险。</p></div>
+        <div class="body"><p>它只能操作你给它指定的工作区文件夹，跑不出这个范围。新建、修改、跑命令这类动作通常先问你（有的设置下不弹，就直接做了），所以<b>工作区选小一点</b>就是最实在的保护：<span data-os="win">别一上来就把整个 C 盘交给它。</span><span data-os="mac">别一上来就把整个个人文件夹交给它。</span>看不懂的动作先点拒绝。重要文件先备份，是永远的保险。</p></div>
       </details>
     </section>
 
@@ -669,17 +800,21 @@
             <tr><td>注册 / 看余额 / 查用量</td><td>客户端「设置 → 账号与余额」，或 <a href="https://platform.deepseek.com/" target="_blank" rel="noopener">platform.deepseek.com</a></td></tr>
             <tr><td>看花了多少钱</td><td>客户端「设置 → 账号与余额」→「查询用量」，或 <a href="https://platform.deepseek.com/usage" target="_blank" rel="noopener">platform.deepseek.com/usage</a></td></tr>
             <tr><td>看单价</td><td>用量信息页左下角「产品定价」→ 模型 &amp; 价格（空闲 / 高峰）</td></tr>
-            <tr><td>找回被藏起来的窗口</td><td>点右下角托盘里的图标</td></tr>
-            <tr><td>彻底退出</td><td>右键托盘图标 → 退出</td></tr>
-            <tr><td>卸载</td><td>先「管理 dsh 命令 → 移除」，再从「设置 → 应用」卸载</td></tr>
-            <tr><td>数据在哪</td><td><code class="inl">%USERPROFILE%\.dsh</code>（隐藏文件夹，删前先看 8.2）</td></tr>
+            <tr data-os="win"><td>找回被藏起来的窗口</td><td>点右下角托盘里的图标</td></tr>
+            <tr data-os="mac"><td>找回被藏起来的窗口</td><td>点右上角菜单栏里的图标，或点 Dock 图标</td></tr>
+            <tr data-os="win"><td>彻底退出</td><td>右键托盘图标 → 退出</td></tr>
+            <tr data-os="mac"><td>彻底退出</td><td><code class="inl">⌘Q</code>，或菜单栏图标 → 退出</td></tr>
+            <tr data-os="win"><td>卸载</td><td>先「管理 dsh 命令 → 移除」，再从「设置 → 应用」卸载</td></tr>
+            <tr data-os="mac"><td>卸载</td><td>先「管理 dsh 命令 → 移除」，再把应用拖进废纸篓</td></tr>
+            <tr data-os="win"><td>数据在哪</td><td><code class="inl">%USERPROFILE%\.dsh</code>（隐藏文件夹，删前先看 8.2）</td></tr>
+            <tr data-os="mac"><td>数据在哪</td><td><code class="inl">~/.dsh</code>（隐藏文件夹，<code class="inl">⇧⌘G</code> 直达，删前先看 8.2）</td></tr>
           </tbody>
         </table>
       </div>
     </section>
 
     <footer>
-      本教程按 DeepSeek Harness 0.2.1-rc.3 编写 · 预览版界面可能随版本调整，按钮文字以实际为准
+      本教程按 DeepSeek Harness 0.2.1-rc.3 编写，Windows / macOS 双版本 · 预览版界面可能随版本调整，按钮文字以实际为准
     </footer>
   </main>
 </div>
@@ -769,6 +904,31 @@
     }, { rootMargin: '-10% 0px -70% 0px', threshold: 0 });
     targets.forEach(function (t) { io.observe(t); });
   }
+
+  // 系统切换：Windows / macOS
+  var OS_KEY = 'dsh-tut-os';
+  var osBtns = Array.prototype.slice.call(document.querySelectorAll('[data-set-os]'));
+  function applyOS(os, remember, changeUrl) {
+    document.documentElement.setAttribute('data-os', os);
+    osBtns.forEach(function (b) {
+      b.setAttribute('aria-pressed', b.getAttribute('data-set-os') === os ? 'true' : 'false');
+    });
+    if (remember) { try { localStorage.setItem(OS_KEY, os); } catch (e) {} }
+    if (changeUrl) {
+      try {
+        var u = new URL(location.href);
+        u.searchParams.set('os', os);
+        history.replaceState(null, '', u.toString());
+      } catch (e) {}
+    }
+  }
+  var curOS = document.documentElement.getAttribute('data-os');
+  applyOS(curOS === 'mac' ? 'mac' : 'win', false, false);
+  osBtns.forEach(function (b) {
+    b.addEventListener('click', function () {
+      applyOS(b.getAttribute('data-set-os'), true, true);
+    });
+  });
 })();
 </script>
 </body>
