@@ -516,31 +516,31 @@
       <p>欢迎页上有 <b>稍后配置</b>，可以先看看界面。但只要有任务要调用模型，就必须先配好账号或密钥，否则会报错。</p>
 
       <h3 id="s44">4.4 第一次进客户端：跟着设置引导走一遍</h3>
-      <p>授权成功、第一次进客户端时，会自动出现一个<b>设置引导</b>，一共五屏，一屏点一次 <b>下一步 / 继续</b>，走完就进主界面了。</p>
+      <p>授权成功、第一次进客户端时，会自动出现一个<b>设置引导</b>，一屏点一次 <b>下一步 / 继续</b>，走完就进主界面了。下面挑了其中几屏关键的。</p>
       <ol class="steps">
         <li>前面几屏是说明和基本设置，看着点「下一步」就行。</li>
         <li>如果某一屏让你选<b>工作区文件夹</b>，先选个空文件夹——比如在桌面上新建一个 <code class="inl">AI 工作区</code>。<span data-os="win"><b>别一上来就选整个 C 盘或“文档”</b></span><span data-os="mac"><b>别一上来就选整个个人文件夹或“文稿”</b></span>（第 6 节细讲）。</li>
         <li>有一屏上就有 <b>充值</b> 按钮（截图 09）。新账号余额是 0，<b>直接在这儿点进去充</b>，比单独去网页少走一步，详细步骤见第 5 节。</li>
         <li>有一屏需要你做一个选择（截图 10），按自己的需要选，选完点「下一步」。</li>
-        <li>看到主界面（引导第 5 屏，截图 11）就说明配置完了，可以开始用。
+        <li>看到主界面（最后一屏，截图 11）就说明配置完了，可以开始用。
           <br>引导只弹这一次，以后想改设置就去 <b>设置</b> 里改，选错了不用重来。
         </li>
       </ol>
       <figure>
-        <img loading="lazy" decoding="async" src="img/08-引导1.png" alt="设置引导第 1 屏" width="1280" height="820">
-        <figcaption>截图08：引导 1／5</figcaption>
+        <img loading="lazy" decoding="async" src="img/08-引导-开始设置.png" alt="设置引导第一屏：开始设置" width="1280" height="820">
+        <figcaption>截图08：引导第一屏——点「开始设置」</figcaption>
       </figure>
       <figure>
-        <img loading="lazy" decoding="async" src="img/09-引导3-充值.png" alt="设置引导第 3 屏，带充值按钮" width="1280" height="820">
-        <figcaption>截图09：引导 3／5——新账号余额是 0，就在这一屏点「充值」</figcaption>
+        <img loading="lazy" decoding="async" src="img/09-引导-充值.png" alt="设置引导：准备可用额度这一屏，带充值按钮" width="1280" height="820">
+        <figcaption>截图09：「准备可用额度」这一屏——新账号余额是 0，就在这儿点「充值」</figcaption>
       </figure>
       <figure>
-        <img loading="lazy" decoding="async" src="img/10-引导4.png" alt="设置引导第 4 屏，需要做一个选择" width="1280" height="820">
-        <figcaption>截图10：引导 4／5——这里需要你做一个选择</figcaption>
+        <img loading="lazy" decoding="async" src="img/10-引导-选择用途.png" alt="设置引导：选择你希望它帮你做什么" width="1280" height="820">
+        <figcaption>截图10：「你希望 DeepSeek Harness 帮你做什么」这一屏，按自己的需要选</figcaption>
       </figure>
       <figure>
-        <img loading="lazy" decoding="async" src="img/11-引导5.png" alt="设置引导走完，进入主界面" width="1280" height="820">
-        <figcaption>截图11：引导 5／5——走完就进主界面了</figcaption>
+        <img loading="lazy" decoding="async" src="img/11-引导-完成.png" alt="设置引导最后一屏，走完进入主界面" width="1280" height="820">
+        <figcaption>截图11：最后一屏，走完就进主界面了</figcaption>
       </figure>
     </section>
 
@@ -637,7 +637,7 @@
             <li>④ 左侧栏出现 <code class="inl">AI 工作区</code>、输入框上方也变成它，就成了——以后它动手只在这个文件夹里。</li>
           </ul>
           <b>不要一上来就把整个个人文件夹或「文稿」交给它</b>，先用空文件夹熟悉。</li>
-        <li><b>选模型（可选）</b>：输入框右下角有个模型名（默认 <code class="inl">DeepSeek-V4.1-Flash</code>），点它就能换模型；右边的 <code class="inl">High</code> 之类是<b>思考强度 / 确认档位</b>——档位越高，它想得越久、动手前越会问你。<b>不确定就保持默认</b>，默认档跑通这个教程完全够用。</li>
+        <li><b>选模型（可选）</b>：点输入框右下角那个模型名，弹出来两项——<b>模型</b>（默认 <code class="inl">DeepSeek-V4.1-Flash</code>）和 <b>推理等级</b>（默认 <code class="inl">High</code>）。推理等级越高，它想得越久、越费 token；调低会快一些、也便宜一些。<b>不确定就保持默认</b>，默认档跑通这个教程完全够用。</li>
         <li>在输入框发一句话（<span data-os="win">截图 18</span><span data-os="mac">Mac 截图 4</span>），比如："帮我在当前文件夹里新建一个 hello.txt，写一句你好。"</li>
         <li>它会直接开始干活。如果弹出<b>权限确认</b>（新建文件、运行命令时可能会问），看清它要做什么再点 <b>允许</b>；<b>没弹窗也是正常的</b>——不是没生效，说明这一步不需要额外确认。</li>
         <li>做完去文件夹看，<code class="inl">hello.txt</code> 是不是真出现了。<span data-os="win">没看到就按 <code class="inl">F5</code> 刷新一下文件夹。</span><span data-os="mac">没看到就在访达里退到上一级再点回来（访达一般会自己刷新）。</span></li>
@@ -656,8 +656,8 @@
         · 第一次选「桌面」时系统会问“是否允许访问桌面文件夹”，点<b>允许</b>，不然它读不到你给的文件。
       </div>
       <figure>
-        <img loading="lazy" decoding="async" src="img/16-选择模型.png" alt="点开输入框右下角的模型名，选择模型与思考强度档位">
-        <figcaption>截图16：点开输入框右下角的模型名，能换模型、调思考强度档位（两平台界面一样）</figcaption>
+        <img loading="lazy" decoding="async" src="img/16-选择模型.png" alt="点开输入框右下角的模型名，弹出模型与推理等级两项" width="1280" height="820">
+        <figcaption>截图16：点开输入框右下角的模型名——上面是<b>模型</b>，下面是<b>推理等级</b>（两平台界面一样）</figcaption>
       </figure>
       <figure>
         <img loading="lazy" decoding="async" src="img/17-主界面.png" alt="客户端主界面" width="1280" height="820">
