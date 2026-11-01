@@ -380,10 +380,6 @@
         <img loading="lazy" decoding="async" src="img/mac/02-下载按钮.png" alt="官网下载页的 macOS 下载按钮">
         <figcaption>Mac 截图 2：官网下载页，macOS 版本下载按钮（注意选对芯片）</figcaption>
       </figure>
-      <figure data-os="mac">
-        <img loading="lazy" decoding="async" src="img/mac/03-下载完成.png" alt="下载完成的 dmg 文件">
-        <figcaption>Mac 截图 3：下载好的 .dmg 文件</figcaption>
-      </figure>
     </section>
 
     <!-- 3 -->
@@ -408,6 +404,15 @@
         <span class="t">拖不进「应用程序」，或者提示“已损坏，无法打开”？</span>
         ① 先确认 dmg 是从官网下的，别用网盘版本；② 打开「终端」（<code class="inl">⌘ + 空格</code> 搜“终端”回车），粘贴运行 <code class="inl">xattr -dr com.apple.quarantine "/Applications/DeepSeek Harness.app"</code> 回车，再双击打开。（会要求输开机密码，输入时屏幕不显示字符是正常的。）
       </div>
+      <div class="box warn" data-os="mac">
+        <span class="t">点「管理 dsh 命令」弹“请先将 DeepSeek Harness 安装到「应用程序」文件夹”？</span>
+        这句的意思是：<b>当前跑着的这份程序不在 `/Applications` 里</b>。最常见是从 dmg 窗口里、或从「下载」文件夹里直接双击打开的——这种启动方式 macOS 会给它一个临时路径（App Translocation），程序自己都找不到自己在哪。按顺序做：<br>
+        ① 按 <code class="inl">⌘Q</code> 退出程序；桌面上还挂着 dmg 的话，在访达侧边栏点它后面的 ⏏ 弹出。<br>
+        ② 访达按 <code class="inl">⇧⌘A</code> 打开「应用程序」，确认里面有 <b>DeepSeek Harness</b>；如果它只躺在「下载」里，拖进去（问是否替换就选<b>替换</b>）。<br>
+        ③ <b>只从「应用程序」里双击启动</b>，别再点 dmg 窗口里那个图标。<br>
+        ④ 已经在「应用程序」里还报同样的错：退出应用，终端运行 <code class="inl">xattr -dr com.apple.quarantine "/Applications/DeepSeek Harness.app"</code>，再启动一次；还不行重启一次 Mac。<br>
+        ⑤ 检查是不是存了好几份：终端运行 <code class="inl">mdfind -name "DeepSeek Harness.app"</code>，只保留 <code class="inl">/Applications</code> 里那份，其它拖到废纸篓。
+      </div>
       <div class="box warn" data-os="win">
         <span class="t">双击后没反应？</span>
         右键那个 exe → <b>以管理员身份运行</b>，再试一次。
@@ -417,12 +422,8 @@
         <figcaption>截图04：安装程序界面，"仅为我安装"和"安装"按钮</figcaption>
       </figure>
       <figure data-os="mac">
-        <img loading="lazy" decoding="async" src="img/mac/04-拖入应用程序.png" alt="dmg 窗口里把图标拖进应用程序文件夹">
-        <figcaption>Mac 截图 4：把图标拖进「应用程序」文件夹</figcaption>
-      </figure>
-      <figure data-os="mac">
-        <img loading="lazy" decoding="async" src="img/mac/05-无法验证开发者.png" alt="系统设置 → 隐私与安全性 里的“仍要打开”">
-        <figcaption>Mac 截图 5：第一次打开被拦时，去「隐私与安全性」点“仍要打开”</figcaption>
+        <img loading="lazy" decoding="async" src="img/mac/03-拖入应用程序.png" alt="dmg 窗口里把图标拖进应用程序文件夹">
+        <figcaption>Mac 截图 3：把图标拖进「应用程序」文件夹</figcaption>
       </figure>
     </section>
 
@@ -608,10 +609,16 @@
     <section class="card" id="s6">
       <h2 class="sec"><span class="num">6</span>第一次使用</h2>
       <ol class="steps">
-        <li>先给它指定一个<b>工作区</b>（允许它读写的文件夹）。点 <b>选择文件夹 / 添加工作区</b>，比如在桌面新建一个 <code class="inl">AI 工作区</code> 选它。
-          <br><span data-os="win"><b>不要一上来就把整个 C 盘或"文档"交给它</b></span><span data-os="mac"><b>不要一上来就把整个个人文件夹或「文稿」交给它</b></span>，先用空文件夹熟悉。
-        </li>
-        <li>在输入框发一句话（截图 18），比如："帮我在当前文件夹里新建一个 hello.txt，写一句你好。"</li>
+        <li data-os="win">先给它指定一个<b>工作区</b>（允许它读写的文件夹）。点 <b>选择文件夹 / 添加工作区</b>，比如在桌面新建一个 <code class="inl">AI 工作区</code> 选它。<br><b>不要一上来就把整个 C 盘或“文档”交给它</b>，先用空文件夹熟悉。</li>
+        <li data-os="mac">先给它指定一个<b>工作区</b>（允许它读写的文件夹）。Mac 上没有 C 盘 D 盘，路径长这样：<code class="inl">/Users/你的用户名/Desktop/…</code>。
+          <ul>
+            <li>① 点 Dock 最左边那个笑脸（访达）→ 左侧点 <b>桌面</b>；</li>
+            <li>② 按 <code class="inl">⇧⌘N</code> 新建文件夹，名字填 <code class="inl">AI 工作区</code>（也可右键 → 新建文件夹；改名选中后按 <code class="inl">Return</code>）；</li>
+            <li>③ 回客户端，点输入框上方那个 <b>默认工作区</b> → <b>＋ 添加工作区…</b>，在弹窗里点「桌面」→ 选中 <code class="inl">AI 工作区</code> → <b>打开</b>；</li>
+            <li>④ 左侧栏出现 <code class="inl">AI 工作区</code>、输入框上方也变成它，就成了——以后它动手只在这个文件夹里。</li>
+          </ul>
+          <b>不要一上来就把整个个人文件夹或「文稿」交给它</b>，先用空文件夹熟悉。</li>
+        <li>在输入框发一句话（<span data-os="win">截图 18</span><span data-os="mac">Mac 截图 4</span>），比如："帮我在当前文件夹里新建一个 hello.txt，写一句你好。"</li>
         <li>它会直接开始干活。如果弹出<b>权限确认</b>（新建文件、运行命令时可能会问），看清它要做什么再点 <b>允许</b>；<b>没弹窗也是正常的</b>——不是没生效，说明这一步不需要额外确认。</li>
         <li>做完去文件夹看，<code class="inl">hello.txt</code> 是不是真出现了。<span data-os="win">没看到就按 <code class="inl">F5</code> 刷新一下文件夹。</span><span data-os="mac">没看到就在访达里退到上一级再点回来（访达一般会自己刷新）。</span></li>
       </ol>
@@ -620,13 +627,25 @@
         弹了权限窗：看不懂的<strong>先点拒绝</strong>，或者直接问它：“你刚才那步是在干什么？”<br>
         没弹窗：也正常，它只在<b>你给它的工作区文件夹</b>里动手，不会跑到别处去。
       </div>
+      <div class="box note" data-os="mac">
+        <span class="t">Mac 文件管理速成（看懂路径就够用）</span>
+        · <code class="inl">~</code> 就是 <code class="inl">/Users/你的用户名</code>，即访达侧边栏里的「小房子」；教程里的 <code class="inl">~/.dsh</code> = 个人文件夹里的隐藏文件夹 <code class="inl">.dsh</code>。<br>
+        · 访达左侧那几项就是固定文件夹：<b>桌面 / 文稿 / 下载</b>，对应 <code class="inl">/Users/你/Desktop</code>、<code class="inl">/Users/你/Documents</code>、<code class="inl">/Users/你/Downloads</code>。<br>
+        · 常用快捷键：<code class="inl">⇧⌘N</code> 新建文件夹、<code class="inl">⌘↑</code> 上一级、<code class="inl">⇧⌘.</code> 显示隐藏文件、<code class="inl">⌥⌘P</code> 显示路径栏（一眼看到自己在哪）、选中文件按 <code class="inl">⌥⌘C</code> 复制完整路径。<br>
+        · 外接硬盘 / U 盘在 <code class="inl">/Volumes/…</code>，一般<b>别当工作区</b>（拔掉就没了）。<br>
+        · 第一次选「桌面」时系统会问“是否允许访问桌面文件夹”，点<b>允许</b>，不然它读不到你给的文件。
+      </div>
       <figure>
         <img loading="lazy" decoding="async" src="img/17-主界面.png" alt="客户端主界面">
-        <figcaption>截图17：主界面的工作区选择和输入框</figcaption>
+        <figcaption>截图17：主界面的工作区选择和输入框<span data-os="mac">（Mac 上界面一样，只是窗口左上角是红黄绿三个圆按钮）</span></figcaption>
       </figure>
-      <figure>
+      <figure data-os="win">
         <img loading="lazy" decoding="async" src="img/18-发送指令.png" alt="在输入框里输入一句话并发送">
         <figcaption>截图18：在输入框里把要求写清楚，按 <b>Enter</b> 发出去（右下角的圆箭头也能点）</figcaption>
+      </figure>
+      <figure data-os="mac">
+        <img loading="lazy" decoding="async" src="img/mac/04-新建工作区.png" alt="Mac 上在工作区文件夹里发送指令">
+        <figcaption>Mac 截图 4：工作区选在 Mac 的文件夹里，回复中显示的路径是 <code class="inl">/Users/…</code> 开头</figcaption>
       </figure>
     </section>
 
@@ -644,10 +663,6 @@
         <li><b>别把密钥、密码、身份证照片发给它</b>，也别让它动你不了解的文件夹。</li>
         <li>中文输入法打不出字：点一下输入框再试；不行就重启客户端。<span data-os="mac">如果只是候选框跑到屏幕角落，把客户端窗口拖一下再点回输入框通常就好了。</span></li>
       </ul>
-      <figure data-os="mac">
-        <img loading="lazy" decoding="async" src="img/mac/06-菜单栏图标.png" alt="右上角菜单栏里的图标和退出菜单项">
-        <figcaption>Mac 截图 6：屏幕右上角菜单栏里的图标，菜单里的「退出」</figcaption>
-      </figure>
     </section>
 
     <!-- 8 -->
@@ -690,12 +705,8 @@
         <li>右键 Dock 里的废纸篓 → <b>清倒废纸篓</b>，然后再看一眼「应用程序」确认已经没了。</li>
       </ol>
       <figure data-os="mac">
-        <img loading="lazy" decoding="async" src="img/mac/07-管理dsh命令.png" alt="屏幕顶部菜单里的 管理 dsh 命令">
-        <figcaption>Mac 截图 7：屏幕顶部菜单栏 → DeepSeek Harness → “管理 dsh 命令…”，点进去选“移除”</figcaption>
-      </figure>
-      <figure data-os="mac">
-        <img loading="lazy" decoding="async" src="img/mac/08-移到废纸篓.png" alt="应用程序里把 DeepSeek Harness 移到废纸篓">
-        <figcaption>Mac 截图 8：应用程序里右键图标 → “移到废纸篓”</figcaption>
+        <img loading="lazy" decoding="async" src="img/mac/05-管理dsh命令.png" alt="屏幕顶部菜单里的 管理 dsh 命令">
+        <figcaption>Mac 截图 5：屏幕顶部菜单栏 → DeepSeek Harness → “管理 dsh 命令…”，点进去选“移除”</figcaption>
       </figure>
 
       <h3 id="s82">8.2 想彻底清干净（换账号或重装时用）</h3>
@@ -714,6 +725,10 @@
         <li>想用鼠标找：先在访达里按 <code class="inl">⌘ + ⇧ + .</code>（句号）显示隐藏文件，再进个人文件夹（侧边栏那个小房子图标），就能看到 <code class="inl">.dsh</code>。</li>
         <li>把它拖进废纸篓 → 右键 Dock 里的废纸篓 → <b>清倒废纸篓</b>。</li>
       </ol>
+      <div class="box note" data-os="mac">
+        <span class="t">小贴士：怎么退到上一级、怎么选中要删的文件夹</span>
+        按 <code class="inl">⇧⌘G</code> 跳进去后，窗口里显示的是 <code class="inl">.dsh</code> <b>里面的东西</b>，这时选不到文件夹本身。按 <b><code class="inl">⌘ ↑</code></b> 退回上一级（<code class="inl">⌥⌘↑</code> 新窗口打开上一级，<code class="inl">⌥⌘P</code> 打开路径栏直接点上级）；退到个人文件夹后 <code class="inl">.dsh</code> 是隐藏的，按 <b><code class="inl">⌘⇧.</code></b> 让它显出来，点选后按 <b><code class="inl">⌘⌫</code></b> 移到废纸篓。
+      </div>
       <p data-os="mac">提示“正在使用”：按 <code class="inl">⌥⌘Esc</code> 打开强制退出窗口 → 选中 DeepSeek 相关项 → <b>强制退出</b>，再删。</p>
       <div class="box note" data-os="mac">
         <span class="t">想连系统缓存一起清（可选）</span>
@@ -726,8 +741,14 @@
 
       <h3 id="s83">8.3 命令行版是另一套东西</h3>
       <p>（<b>用不到可以跳过</b>——没额外装过命令行版的话，这一段跟你无关，不影响卸载。）</p>
+      <p data-os="mac">先分清两个 <code class="inl">dsh</code>：<b>桌面版装的</b>那个就是 8.1 第 2 步「管理 dsh 命令…」管的，在应用里「移除」最干净；<b>npm 装的命令行版</b>是另一个包，卸载桌面版不会带走它。</p>
       <p>如果电脑上还有命令行版（<code class="inl">dsh</code> 命令），卸载桌面版不会连带删掉它。<span data-os="win">在“命令提示符”或 PowerShell 里运行</span><span data-os="mac">在「终端」里运行</span>——<b>装过哪个就卸哪个，两个都各跑一次</b>（没装的那个会提示找不到，忽略即可）：</p>
-      <p data-os="mac">先看看它还在不在：<code class="inl">⌘ + 空格</code> 搜“终端”打开，输入 <code class="inl">which dsh</code> 回车。有输出就说明还在，一般在 <code class="inl">/usr/local/bin/dsh</code>；想直接删掉就运行 <code class="inl">sudo rm /usr/local/bin/dsh</code>（会问开机密码）。提示 not found 就说明本来就清干净了。</p>
+      <p data-os="mac">查它还在不在、装在哪：</p>
+      <div class="path" data-os="mac"><code>which -a dsh</code><button class="copy">复制</button></div>
+      <p data-os="mac">Mac 上常见位置：<code class="inl">/opt/homebrew/bin/dsh</code>（Apple 芯片 + Homebrew）、<code class="inl">/usr/local/bin/dsh</code>（Intel 机器，或用官方 pkg 装的）、<code class="inl">~/.npm-global/bin/dsh</code>（自己设过 npm 全局目录）。<b>如果打出来的是 <code class="inl">/Applications/DeepSeek Harness.app/…</code> 这种</b>，那就是桌面版放进去的，回 8.1 第 2 步用「移除」，不要手动 <code class="inl">rm</code>。完全没输出（not found）就说明本来就干净，跳过。</p>
+      <p data-os="mac">要硬删就照抄 <code class="inl">which dsh</code> 打出来的完整路径（Homebrew 目录一般归你自己所有，不加 <code class="inl">sudo</code> 也能删；<code class="inl">/usr/bin</code> 里的别碰）：</p>
+      <div class="path" data-os="mac"><code>sudo rm /opt/homebrew/bin/dsh</code><button class="copy">复制</button></div>
+      <p data-os="mac">删完重开一个终端窗口（或运行 <code class="inl">hash -r</code>），再 <code class="inl">which dsh</code> 确认已经 not found。</p>
       <div class="path"><code>npm uninstall -g @deepseek-ai/dsh</code><button class="copy">复制</button></div>
       <div class="path"><code>npm uninstall -g deepseek-harness-cli</code><button class="copy">复制</button></div>
     </section>
@@ -752,6 +773,15 @@
       <details data-os="mac"><summary>提示"无法打开，因为 Apple 无法验证"</summary>
         <div class="body"><p>正常，第一次都会拦。去 <b>系统设置 → 隐私与安全性</b> → 往下滚找到“仍要打开”点一下，输密码或 Touch ID，之后就不会再问了。</p></div>
       </details>
+      <details data-os="mac"><summary>系统设置里根本没有「仍要打开」这个按钮</summary>
+        <div class="body"><p>得先被拦一次，这一行才会出现在 <b>系统设置 → 隐私与安全性</b> 下方。先到「访达 → 应用程序」双击一次，弹出拦截提示时点 <b>好 / 完成</b>，再回设置里看。或者直接用鼠标：在「应用程序」里按住 <code class="inl">Control</code> 点图标 → <b>打开</b> → 再点弹窗里的 <b>打开</b>。</p></div>
+      </details>
+      <details data-os="mac"><summary>提示"这台 Mac 不支持这个应用"</summary>
+        <div class="body"><p>包下错了。Apple 芯片（M 系）用 <b>arm64 / Apple Silicon</b> 包，Intel 机器才是 <b>x64</b>。回看第 1 节怎么查芯片（苹果菜单 → 关于本机 → “芯片”），重下对应那个。</p></div>
+      </details>
+      <details data-os="mac"><summary>点「管理 dsh 命令」提示要先装到「应用程序」文件夹</summary>
+        <div class="body"><p><code class="inl">dsh</code> 命令的管理只对 <code class="inl">/Applications</code> 里那份生效。先 <code class="inl">⌘Q</code> 退出 → 弹出 dmg → 只从「访达 → 应用程序」双击启动（别从 dmg 窗口或「下载」里点）。已经在应用程序里还报错的话，终端运行 <code class="inl">xattr -dr com.apple.quarantine "/Applications/DeepSeek Harness.app"</code> 后重启应用，再不行重启 Mac。</p></div>
+      </details>
       <details><summary>登录了还是提示余额不足（报 402 之类）</summary>
         <div class="body"><p>两种可能：① 没充值；② 登录的是聊天账号，不是开放平台账号。在客户端点左下角账号 → <b>设置 → 账号与余额</b> 看「充值余额」，确实是 0 就点旁边的 <b>充值</b>（第 5 节）；也可以去 <a href="https://platform.deepseek.com/" target="_blank" rel="noopener">platform.deepseek.com</a> 核对。</p></div>
       </details>
@@ -773,7 +803,7 @@
       <details><summary>已经卸载了，命令行里的 dsh 还残留 / 报错</summary>
         <div class="body">
           <p data-os="win">说明卸载时跳过了「管理 dsh 命令 → 移除」。在命令行运行 <code class="inl">where dsh</code>，它会列出残留路径（一般在 <code class="inl">%LOCALAPPDATA%\Programs\</code> 下，或 npm 全局目录 <code class="inl">npm root -g</code> 里）。把那个 <code class="inl">dsh.cmd</code> / <code class="inl">dsh.exe</code> 删掉即可，<b>别把整个文件夹都删了</b>。如果提示"找不到命令"，说明本来就清干净了，不用管。</p>
-          <p data-os="mac">说明卸载时跳过了「管理 dsh 命令 → 移除」。在「终端」里运行 <code class="inl">which dsh</code>，它会显示残留路径（一般在 <code class="inl">/usr/local/bin/dsh</code>，或 npm 全局目录 <code class="inl">npm root -g</code> 里）。用 <code class="inl">sudo rm</code> 把那个 <code class="inl">dsh</code> 删掉即可，<b>别把整个 bin 目录删了</b>。提示 not found 就说明本来就清干净了。</p>
+          <p data-os="mac">说明卸载时跳过了「管理 dsh 命令 → 移除」。在「终端」里运行 <code class="inl">which -a dsh</code>，它会列出所有残留路径：<code class="inl">/opt/homebrew/bin/dsh</code>（Apple 芯片 + Homebrew）、<code class="inl">/usr/local/bin/dsh</code>（Intel 机器或官方 pkg）、或 npm 全局目录 <code class="inl">$(npm prefix -g)/bin/dsh</code>。照抄那个路径用 <code class="inl">rm</code> 删掉（自己的目录不用 <code class="inl">sudo</code>，<code class="inl">/usr/bin</code> 里的别碰），<b>别把整个 bin 目录删了</b>。删完 <code class="inl">hash -r</code> 或重开终端，再 <code class="inl">which dsh</code> 确认 not found。</p>
         </div>
       </details>
       <details><summary>卡住不动 / 一直转圈</summary>
