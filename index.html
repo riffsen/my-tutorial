@@ -50,16 +50,37 @@
 
   /* 侧边目录 */
   .toc{
-    position:sticky;top:24px;flex:0 0 236px;background:var(--card);
-    border:1px solid var(--line);border-radius:var(--radius);padding:16px 14px;box-shadow:var(--shadow);
-    font-size:14px;max-height:calc(100vh - 48px);overflow:auto;
+    position:sticky;top:20px;flex:0 0 238px;background:var(--card);
+    border:1px solid var(--line);border-radius:var(--radius);padding:12px 10px 8px;box-shadow:var(--shadow);
+    font-size:14px;max-height:calc(100vh - 40px);
+    overflow-y:auto;overscroll-behavior:contain;scrollbar-width:thin;
   }
-  .toc h2{font-size:12px;letter-spacing:.12em;color:var(--ink-3);margin:0 0 10px 6px;font-weight:600}
-  .toc a{display:block;padding:6px 8px;border-radius:8px;color:var(--ink-2);line-height:1.4}
+  .toc::-webkit-scrollbar{width:8px}
+  .toc::-webkit-scrollbar-thumb{background:#d5dbe4;border-radius:4px}
+  .toc h2{font-size:11.5px;letter-spacing:.12em;color:var(--ink-3);margin:0 0 6px 8px;font-weight:600}
+  .toc a{display:block;padding:4px 8px;border-radius:7px;color:var(--ink-2);line-height:1.35}
   .toc a:hover{background:var(--brand-soft);color:var(--brand);text-decoration:none}
   .toc a.active{background:var(--brand-soft);color:var(--brand);font-weight:600}
-  .toc .sub{padding-left:20px;font-size:13px;color:var(--ink-3)}
+  .toc .sub{padding:4px 8px 4px 20px;font-size:13px;color:var(--ink-3)}
+  .toc .os-switch{margin:0 0 10px}
   .toc-toggle{display:none}
+  /* 1080P / 2K 等大屏：整体放宽，字号也跟着大一点 */
+  @media (min-width:1600px){
+    .wrap{max-width:1420px;gap:32px}
+    .toc{flex:0 0 272px;font-size:15px;padding:14px 12px 10px}
+    .toc h2{font-size:12px}
+    .toc a{padding:5px 10px;line-height:1.4}
+    .toc .sub{padding:5px 10px 5px 22px;font-size:13.5px}
+    .os-switch button{font-size:14.5px}
+  }
+  /* 窗口特别矮时才压紧，正常屏幕保持宽松 */
+  @media (max-height:680px){
+    .toc{padding:8px 8px 6px}
+    .toc h2{display:none}
+    .toc .os-switch{margin:0 0 6px}
+    .toc a{padding:2px 8px;line-height:1.3}
+    .toc .sub{padding:2px 8px 2px 18px;font-size:12.5px}
+  }
 
   /* 系统切换 */
   .os-switch{
@@ -158,7 +179,8 @@
   /* 图片 */
   figure{margin:20px 0;text-align:center}
   figure img{
-    max-width:100%;border:1px solid var(--line);border-radius:10px;box-shadow:var(--shadow);
+    display:block;margin:0 auto;max-width:100%;height:auto;
+    border:1px solid var(--line);border-radius:10px;box-shadow:var(--shadow);
     background:#fff;
   }
   figcaption{font-size:13.5px;color:var(--ink-3);margin-top:8px}
@@ -254,6 +276,7 @@
       <a class="sub" href="#s52">5.2 在网页里充值</a>
       <a href="#s6">6 · 第一次使用</a>
       <a href="#s7">7 · 日常注意</a>
+      <a class="sub" href="#s71">7.1 把 dsh 命令装进终端</a>
       <a href="#s8">8 · 卸载</a>
       <a class="sub" href="#s81">8.1 正确顺序</a>
       <a class="sub" href="#s82">8.2 想彻底清干净</a>
@@ -339,11 +362,11 @@
         <li>手机放手边——注册要收短信验证码，或者用微信扫码。</li>
       </ol>
       <figure data-os="win">
-        <img loading="lazy" decoding="async" src="img/01-系统类型.png" alt="Win+Pause 打开的系统信息页">
+        <img loading="lazy" decoding="async" src="img/01-系统类型.png" alt="Win+Pause 打开的系统信息页" width="1039" height="767">
         <figcaption>截图01：系统信息页里"系统类型"的位置</figcaption>
       </figure>
       <figure data-os="mac">
-        <img loading="lazy" decoding="async" src="img/mac/01-关于本机.png" alt="苹果菜单 → 关于本机，看芯片那一行">
+        <img loading="lazy" decoding="async" src="img/mac/01-关于本机.png" alt="苹果菜单 → 关于本机，看芯片那一行" width="549" height="920">
         <figcaption>Mac 截图 1：苹果菜单 → 关于本机，看「芯片」那一行</figcaption>
       </figure>
     </section>
@@ -369,15 +392,15 @@
         表示"预览版"，功能正常，只是还在持续改进，会自动升级。
       </div>
       <figure data-os="win">
-        <img loading="lazy" decoding="async" src="img/02-下载按钮.png" alt="官网下载页的 Windows 下载按钮">
+        <img loading="lazy" decoding="async" src="img/02-下载按钮.png" alt="官网下载页的 Windows 下载按钮" width="1276" height="753">
         <figcaption>截图02：官网下载页，Windows 版本下载按钮</figcaption>
       </figure>
       <figure data-os="win">
-        <img loading="lazy" decoding="async" src="img/03-下载完成.png" alt="浏览器下载完成列表">
+        <img loading="lazy" decoding="async" src="img/03-下载完成.png" alt="浏览器下载完成列表" width="1271" height="728">
         <figcaption>截图03：浏览器下载列表里的安装包</figcaption>
       </figure>
       <figure data-os="mac">
-        <img loading="lazy" decoding="async" src="img/mac/02-下载按钮.png" alt="官网下载页的 macOS 下载按钮">
+        <img loading="lazy" decoding="async" src="img/mac/02-下载按钮.png" alt="官网下载页的 macOS 下载按钮" width="2210" height="1261">
         <figcaption>Mac 截图 2：官网下载页，macOS 版本下载按钮（注意选对芯片）</figcaption>
       </figure>
     </section>
@@ -418,11 +441,11 @@
         右键那个 exe → <b>以管理员身份运行</b>，再试一次。
       </div>
       <figure data-os="win">
-        <img loading="lazy" decoding="async" src="img/04-安装界面.png" alt="安装程序主界面">
+        <img loading="lazy" decoding="async" src="img/04-安装界面.png" alt="安装程序主界面" width="600" height="600">
         <figcaption>截图04：安装程序界面，"仅为我安装"和"安装"按钮</figcaption>
       </figure>
       <figure data-os="mac">
-        <img loading="lazy" decoding="async" src="img/mac/03-拖入应用程序.png" alt="dmg 窗口里把图标拖进应用程序文件夹">
+        <img loading="lazy" decoding="async" src="img/mac/03-拖入应用程序.png" alt="dmg 窗口里把图标拖进应用程序文件夹" width="1072" height="748">
         <figcaption>Mac 截图 3：把图标拖进「应用程序」文件夹</figcaption>
       </figure>
     </section>
@@ -464,15 +487,15 @@
       </div>
 
       <figure>
-        <img loading="lazy" decoding="async" src="img/05-欢迎页.png" alt="客户端欢迎页">
+        <img loading="lazy" decoding="async" src="img/05-欢迎页.png" alt="客户端欢迎页" width="600" height="700">
         <figcaption>截图05：欢迎页上的"登录"入口</figcaption>
       </figure>
       <figure>
-        <img loading="lazy" decoding="async" src="img/06-注册页.png" alt="开放平台注册页">
+        <img loading="lazy" decoding="async" src="img/06-注册页.png" alt="开放平台注册页" width="1129" height="1105">
         <figcaption>截图06：注册页的手机号、验证码、注册按钮</figcaption>
       </figure>
       <figure>
-        <img loading="lazy" decoding="async" src="img/07-授权成功.png" alt="授权成功页面">
+        <img loading="lazy" decoding="async" src="img/07-授权成功.png" alt="授权成功页面" width="1129" height="1105">
         <figcaption>截图07：授权成功页的"打开客户端"</figcaption>
       </figure>
 
@@ -497,31 +520,27 @@
       <ol class="steps">
         <li>前面几屏是说明和基本设置，看着点「下一步」就行。</li>
         <li>如果某一屏让你选<b>工作区文件夹</b>，先选个空文件夹——比如在桌面上新建一个 <code class="inl">AI 工作区</code>。<span data-os="win"><b>别一上来就选整个 C 盘或“文档”</b></span><span data-os="mac"><b>别一上来就选整个个人文件夹或“文稿”</b></span>（第 6 节细讲）。</li>
-        <li>有一屏上就有 <b>充值</b> 按钮（截图 10）。新账号余额是 0，<b>直接在这儿点进去充</b>，比单独去网页少走一步，详细步骤见第 5 节。</li>
-        <li>有一屏需要你做一个选择（截图 11），按自己的需要选，选完点「下一步」。</li>
-        <li>看到主界面（引导第 5 屏，截图 12）就说明配置完了，可以开始用。
+        <li>有一屏上就有 <b>充值</b> 按钮（截图 09）。新账号余额是 0，<b>直接在这儿点进去充</b>，比单独去网页少走一步，详细步骤见第 5 节。</li>
+        <li>有一屏需要你做一个选择（截图 10），按自己的需要选，选完点「下一步」。</li>
+        <li>看到主界面（引导第 5 屏，截图 11）就说明配置完了，可以开始用。
           <br>引导只弹这一次，以后想改设置就去 <b>设置</b> 里改，选错了不用重来。
         </li>
       </ol>
       <figure>
-        <img loading="lazy" decoding="async" src="img/08-引导1.png" alt="设置引导第 1 屏">
+        <img loading="lazy" decoding="async" src="img/08-引导1.png" alt="设置引导第 1 屏" width="1280" height="820">
         <figcaption>截图08：引导 1／5</figcaption>
       </figure>
       <figure>
-        <img loading="lazy" decoding="async" src="img/09-引导2.png" alt="设置引导第 2 屏">
-        <figcaption>截图09：引导 2／5</figcaption>
+        <img loading="lazy" decoding="async" src="img/09-引导3-充值.png" alt="设置引导第 3 屏，带充值按钮" width="1280" height="820">
+        <figcaption>截图09：引导 3／5——新账号余额是 0，就在这一屏点「充值」</figcaption>
       </figure>
       <figure>
-        <img loading="lazy" decoding="async" src="img/10-引导3-充值.png" alt="设置引导第 3 屏，带充值按钮">
-        <figcaption>截图10：引导 3／5——新账号余额是 0，就在这一屏点「充值」</figcaption>
+        <img loading="lazy" decoding="async" src="img/10-引导4.png" alt="设置引导第 4 屏，需要做一个选择" width="1280" height="820">
+        <figcaption>截图10：引导 4／5——这里需要你做一个选择</figcaption>
       </figure>
       <figure>
-        <img loading="lazy" decoding="async" src="img/11-引导4.png" alt="设置引导第 4 屏，需要做一个选择">
-        <figcaption>截图11：引导 4／5——这里需要你做一个选择</figcaption>
-      </figure>
-      <figure>
-        <img loading="lazy" decoding="async" src="img/12-引导5.png" alt="设置引导走完，进入主界面">
-        <figcaption>截图12：引导 5／5——走完就进主界面了</figcaption>
+        <img loading="lazy" decoding="async" src="img/11-引导5.png" alt="设置引导走完，进入主界面" width="1280" height="820">
+        <figcaption>截图11：引导 5／5——走完就进主界面了</figcaption>
       </figure>
     </section>
 
@@ -535,7 +554,7 @@
         <li>打开 DeepSeek Harness，点窗口<b>左下角</b>自己账号那一行（显示手机号，比如 <code class="inl">136******10</code>）。</li>
         <li>弹出<b>设置</b>窗口，左侧菜单点 <b>账号与余额</b>。</li>
         <li>右侧上方是账号卡片：<b>已登录 DeepSeek</b> + 手机号；右边有 <b>更多账号信息 ↗</b>，想看网页端的账户详情就从这儿跳。</li>
-        <li>下面一张卡片写着 <b>充值余额</b> 和当前金额（新账号是 <code class="inl">¥0.00</code>）。点右下的 <b>充值</b> 按钮（截图 13 红框）。</li>
+        <li>下面一张卡片写着 <b>充值余额</b> 和当前金额（新账号是 <code class="inl">¥0.00</code>）。点右下的 <b>充值</b> 按钮（截图 12 红框）。</li>
         <li>浏览器会打开开放平台的收银台，从下面 5.2 的<b>第 3 步</b>接着做（选金额 → 扫码付款）。</li>
         <li>付完切回客户端，<b>设置 → 账号与余额</b> 里的 <b>充值余额</b> 数字变了就成功了；没变就退出客户端重新打开。</li>
       </ol>
@@ -544,12 +563,12 @@
         <b>查询用量</b> 看已经花了多少、每次任务扣了多少；<b>更多账号信息 ↗</b> 跳到网页端看账单、改绑手机、查发票。余额和用量都能在里面看清楚。
       </div>
       <figure>
-        <img loading="lazy" decoding="async" src="img/13-客户端充值入口.png" alt="客户端左下角账号 → 设置 → 账号与余额，红框标出充值按钮">
-        <figcaption>截图13：客户端「设置 → 账号与余额」，红框处就是<b>充值</b>按钮（左下角红框是打开设置的入口）</figcaption>
+        <img loading="lazy" decoding="async" src="img/12-客户端充值入口.png" alt="客户端左下角账号 → 设置 → 账号与余额，红框标出充值按钮" width="1280" height="820">
+        <figcaption>截图12：客户端「设置 → 账号与余额」，红框处就是<b>充值</b>按钮（左下角红框是打开设置的入口）</figcaption>
       </figure>
       <figure>
-        <img loading="lazy" decoding="async" src="img/14-充值支付.png" alt="充值页面，金额选择与支付宝 / 微信支付">
-        <figcaption>截图14：点了「充值」后浏览器打开的收银台——选金额，再用支付宝 / 微信扫码</figcaption>
+        <img loading="lazy" decoding="async" src="img/13-充值支付.png" alt="充值页面，金额选择与支付宝 / 微信支付" width="1280" height="820">
+        <figcaption>截图13：点了「充值」后浏览器打开的收银台——选金额，再用支付宝 / 微信扫码</figcaption>
       </figure>
 
       <h3 id="s52">5.2 在网页里充值</h3>
@@ -578,12 +597,12 @@
         <li>按模型分组的图能看出是 flash 还是 v4-pro 花得多。</li>
       </ul>
       <figure>
-        <img loading="lazy" decoding="async" src="img/15-用量信息.png" alt="开放平台用量信息页，左下角红框为产品定价入口">
-        <figcaption>截图15：用量信息页——余额、累计消费、请求次数和 Token 图；左下角红框是<b>产品定价</b></figcaption>
+        <img loading="lazy" decoding="async" src="img/14-用量信息.png" alt="开放平台用量信息页，左下角红框为产品定价入口" width="1278" height="1359">
+        <figcaption>截图14：用量信息页——余额、累计消费、请求次数和 Token 图；左下角红框是<b>产品定价</b></figcaption>
       </figure>
 
       <h3>看单价：模型 &amp; 价格</h3>
-      <p>用量信息页左下角点 <b>产品定价</b>，会打开 API 文档的「模型 &amp; 价格」页。表里按<b>“百万 tokens”</b>为单位列单价，每个模型下面分 <b>空闲时段</b> / <b>高峰时段</b> 两行（截图 16 红框）。以“百万 tokens 输入（缓存命中）”为例：</p>
+      <p>用量信息页左下角点 <b>产品定价</b>，会打开 API 文档的「模型 &amp; 价格」页。表里按<b>“百万 tokens”</b>为单位列单价，每个模型下面分 <b>空闲时段</b> / <b>高峰时段</b> 两行（截图 15 红框）。以“百万 tokens 输入（缓存命中）”为例：</p>
       <div class="tbl-wrap">
         <table>
           <thead><tr><th>模型</th><th>空闲时段</th><th>高峰时段</th></tr></thead>
@@ -595,8 +614,8 @@
       </div>
       <p>同一个表里还列了各模型的版本、上下文长度、功能和<b>输出单价</b>。数字会随版本调整，<b>以页面上的为准</b>。</p>
       <figure>
-        <img loading="lazy" decoding="async" src="img/16-模型价格.png" alt="API 文档的模型 &amp; 价格页，红框内为空闲 / 高峰单价">
-        <figcaption>截图16：模型 &amp; 价格页，红框里就是空闲 / 高峰两档单价（单位：元 / 百万 tokens）</figcaption>
+        <img loading="lazy" decoding="async" src="img/15-模型价格.png" alt="API 文档的模型 &amp; 价格页，红框内为空闲 / 高峰单价" width="1265" height="1275">
+        <figcaption>截图15：模型 &amp; 价格页，红框里就是空闲 / 高峰两档单价（单位：元 / 百万 tokens）</figcaption>
       </figure>
 
       <div class="box warn">
@@ -618,6 +637,7 @@
             <li>④ 左侧栏出现 <code class="inl">AI 工作区</code>、输入框上方也变成它，就成了——以后它动手只在这个文件夹里。</li>
           </ul>
           <b>不要一上来就把整个个人文件夹或「文稿」交给它</b>，先用空文件夹熟悉。</li>
+        <li><b>选模型（可选）</b>：输入框右下角有个模型名（默认 <code class="inl">DeepSeek-V4.1-Flash</code>），点它就能换模型；右边的 <code class="inl">High</code> 之类是<b>思考强度 / 确认档位</b>——档位越高，它想得越久、动手前越会问你。<b>不确定就保持默认</b>，默认档跑通这个教程完全够用。</li>
         <li>在输入框发一句话（<span data-os="win">截图 18</span><span data-os="mac">Mac 截图 4</span>），比如："帮我在当前文件夹里新建一个 hello.txt，写一句你好。"</li>
         <li>它会直接开始干活。如果弹出<b>权限确认</b>（新建文件、运行命令时可能会问），看清它要做什么再点 <b>允许</b>；<b>没弹窗也是正常的</b>——不是没生效，说明这一步不需要额外确认。</li>
         <li>做完去文件夹看，<code class="inl">hello.txt</code> 是不是真出现了。<span data-os="win">没看到就按 <code class="inl">F5</code> 刷新一下文件夹。</span><span data-os="mac">没看到就在访达里退到上一级再点回来（访达一般会自己刷新）。</span></li>
@@ -636,16 +656,20 @@
         · 第一次选「桌面」时系统会问“是否允许访问桌面文件夹”，点<b>允许</b>，不然它读不到你给的文件。
       </div>
       <figure>
-        <img loading="lazy" decoding="async" src="img/17-主界面.png" alt="客户端主界面">
+        <img loading="lazy" decoding="async" src="img/16-选择模型.png" alt="点开输入框右下角的模型名，选择模型与思考强度档位">
+        <figcaption>截图16：点开输入框右下角的模型名，能换模型、调思考强度档位（两平台界面一样）</figcaption>
+      </figure>
+      <figure>
+        <img loading="lazy" decoding="async" src="img/17-主界面.png" alt="客户端主界面" width="1280" height="820">
         <figcaption>截图17：主界面的工作区选择和输入框<span data-os="mac">（Mac 上界面一样，只是窗口左上角是红黄绿三个圆按钮）</span></figcaption>
       </figure>
       <figure data-os="win">
-        <img loading="lazy" decoding="async" src="img/18-发送指令.png" alt="在输入框里输入一句话并发送">
+        <img loading="lazy" decoding="async" src="img/18-发送指令.png" alt="在输入框里输入一句话并发送" width="1280" height="820">
         <figcaption>截图18：在输入框里把要求写清楚，按 <b>Enter</b> 发出去（右下角的圆箭头也能点）</figcaption>
       </figure>
       <figure data-os="mac">
-        <img loading="lazy" decoding="async" src="img/mac/04-新建工作区.png" alt="Mac 上在工作区文件夹里发送指令">
-        <figcaption>Mac 截图 4：工作区选在 Mac 的文件夹里，回复中显示的路径是 <code class="inl">/Users/…</code> 开头</figcaption>
+        <img loading="lazy" decoding="async" src="img/mac/04-选择工作区文件夹.png" alt="把新建好的 AI 工作区文件夹选为工作区" width="1969" height="1226">
+        <figcaption>Mac 截图 4：把新建好的文件夹选为工作区，发送后回复里显示的路径是 <code class="inl">/Users/…</code> 开头</figcaption>
       </figure>
     </section>
 
@@ -663,6 +687,22 @@
         <li><b>别把密钥、密码、身份证照片发给它</b>，也别让它动你不了解的文件夹。</li>
         <li>中文输入法打不出字：点一下输入框再试；不行就重启客户端。<span data-os="mac">如果只是候选框跑到屏幕角落，把客户端窗口拖一下再点回输入框通常就好了。</span></li>
       </ul>
+
+      <h3 id="s71">7.1 可选：把 <code class="inl">dsh</code> 命令装进终端</h3>
+      <p>（<b>不装完全不影响</b>——只要你不打算在终端 / 脚本里调用它，这一节可以跳过。）</p>
+      <p>桌面版可以往系统里装一个 <code class="inl">dsh</code> 命令。装好之后在<span data-os="win">命令行</span><span data-os="mac">「终端」</span>里敲 <code class="inl">dsh</code>，用的还是同一个 agent：同一份登录状态、同一份数据（<code class="inl"><span data-os="win">%USERPROFILE%\.dsh</span><span data-os="mac">~/.dsh</span></code>），只是把界面换成了命令行。官方文档里 <code class="inl">dsh xxx</code> 那些用法，前提就是先把这个命令装好。</p>
+      <ol class="steps">
+        <li>打开客户端，<span data-os="win">找到它的菜单（<b>右下角托盘图标右键</b>，或界面里的菜单入口）</span><span data-os="mac">让窗口在前台，看屏幕<b>最上面那条菜单栏</b>（Mac 的程序菜单永远在屏幕顶部，不在窗口里），点 <b>DeepSeek Harness</b></span>。</li>
+        <li>点 <b>安装 dsh 命令…</b>（有的版本是 <b>管理 dsh 命令…</b> → 里面选 <b>安装</b>）。</li>
+        <li>如果弹窗问要不要加进 PATH / 是否允许修改<span data-os="win">，点 <b>是 / 允许</b></span><span data-os="mac">，点 <b>是 / 允许</b>；装到 <code class="inl">/usr/local/bin</code> 这种系统目录时会<b>问开机密码</b>，输入时屏幕不显示字符是正常的</span>。</li>
+        <li><b>新开</b>一个<span data-os="win">「命令提示符」或 PowerShell</span><span data-os="mac">「终端」</span>窗口（<b>旧的窗口读不到新 PATH</b>），输入 <code class="inl">dsh --version</code> 回车，能打印版本号就成了。</li>
+      </ol>
+      <p data-os="win">Windows 上一般会把它放在 <code class="inl">%LOCALAPPDATA%\Programs\…</code> 里，并把那个目录加进用户 PATH，<b>不需要管理员权限</b>。</p>
+      <p data-os="mac">装在哪儿：常见 <code class="inl">/usr/local/bin/dsh</code>，也可能是 <code class="inl">~/.local/bin/dsh</code>——用 <code class="inl">which -a dsh</code> 看确定的位置。</p>
+      <div class="box note">
+        <span class="t">不想要了？</span>
+        同一个入口 → <b>移除</b>。8.1 节卸载时的第 2 步「管理 dsh 命令 → 移除」，删的就是这个命令。
+      </div>
     </section>
 
     <!-- 8 -->
@@ -670,12 +710,12 @@
       <h2 class="sec"><span class="num">8</span>卸载</h2>
       <div class="box danger">
         <span class="t">顺序错了会留残余</span>
-        一定要先做第 2 步（在应用里移除 dsh 命令），再去系统里卸载。只跑卸载程序（Mac 上就是只把应用拖进废纸篓）的话，命令行里会永久残留一个失效的 <code class="inl">dsh</code>。
+        一定要先做第 2 步（在应用里移除 dsh 命令），再去系统里卸载。只跑卸载程序（Mac 上就是只把应用拖进废纸篓）的话，命令行里会永久残留一个失效的 <code class="inl">dsh</code>。<br><b>7.1 节没装过 <code class="inl">dsh</code> 命令也没关系</b>：菜单里没有「移除」这一项就跳过第 2 步，直接往下走。
       </div>
       <h3 id="s81">8.1 正确顺序</h3>
       <ol class="steps" data-os="win">
         <li>打开 DeepSeek Harness（还没开就先开一下）。</li>
-        <li>菜单里找 <b>管理 dsh 命令…</b>（一般在"检查更新…"下面）→ 点 <b>移除</b>。</li>
+        <li>菜单里找 <b>管理 dsh 命令…</b>（一般在"检查更新…"下面）→ 点 <b>移除</b>。这一条删的就是 7.1 节装进去的 <code class="inl">dsh</code> 命令。</li>
         <li>右键托盘图标 → <b>退出</b>，确保进程真的没了。</li>
         <li>按 <code class="inl">Win + I</code> 打开设置，再走对应系统的路径：
           <ul>
@@ -688,24 +728,24 @@
         <li>再搜一次 <code class="inl">DeepSeek</code>，确认已经没了。</li>
       </ol>
       <figure data-os="win">
-        <img loading="lazy" decoding="async" src="img/19-管理dsh命令.png" alt="菜单里的 管理 dsh 命令 选项">
+        <img loading="lazy" decoding="async" src="img/19-管理dsh命令.png" alt="菜单里的 管理 dsh 命令 选项" width="1280" height="820">
         <figcaption>截图19：菜单里的"管理 dsh 命令…"，点进去选"移除"</figcaption>
       </figure>
       <figure data-os="win">
-        <img loading="lazy" decoding="async" src="img/20-卸载向导.png" alt="卸载向导窗口">
+        <img loading="lazy" decoding="async" src="img/20-卸载向导.png" alt="卸载向导窗口" width="972" height="940">
         <figcaption>截图20：卸载向导里的"卸载 / Uninstall"按钮</figcaption>
       </figure>
 
       <ol class="steps" data-os="mac">
         <li>打开 DeepSeek Harness（还没开就先开一下），让窗口在前台。</li>
-        <li>看屏幕<b>最上面那条菜单栏</b>（Mac 的程序菜单永远在屏幕顶部，不在窗口里），点 <b>DeepSeek Harness</b> → 找 <b>管理 dsh 命令…</b>（一般在“检查更新…”下面）→ 点 <b>移除</b>。</li>
+        <li>看屏幕<b>最上面那条菜单栏</b>（Mac 的程序菜单永远在屏幕顶部，不在窗口里），点 <b>DeepSeek Harness</b> → 找 <b>管理 dsh 命令…</b>（一般在“检查更新…”下面）→ 点 <b>移除</b>。这一条删的就是 7.1 节装进去的 <code class="inl">dsh</code> 命令。</li>
         <li>按 <code class="inl">⌘Q</code> 退出（或点右上角菜单栏图标 → 退出），确认 Dock 里图标下面那个小点没了。</li>
         <li>打开「访达」→ 左侧点 <b>应用程序</b> → 找到 <b>DeepSeek Harness</b>。</li>
         <li>右键（或按住 <code class="inl">Control</code> 点）→ <b>移到废纸篓</b>，需要时输入开机密码。</li>
         <li>右键 Dock 里的废纸篓 → <b>清倒废纸篓</b>，然后再看一眼「应用程序」确认已经没了。</li>
       </ol>
       <figure data-os="mac">
-        <img loading="lazy" decoding="async" src="img/mac/05-管理dsh命令.png" alt="屏幕顶部菜单里的 管理 dsh 命令">
+        <img loading="lazy" decoding="async" src="img/mac/05-管理dsh命令.png" alt="屏幕顶部菜单里的 管理 dsh 命令" width="1028" height="827">
         <figcaption>Mac 截图 5：屏幕顶部菜单栏 → DeepSeek Harness → “管理 dsh 命令…”，点进去选“移除”</figcaption>
       </figure>
 
@@ -800,6 +840,12 @@
       <details data-os="mac"><summary>删不掉应用 / 提示程序正在运行</summary>
         <div class="body"><p>先按 <code class="inl">⌘Q</code> 真退出；还不行就按 <code class="inl">⌥⌘Esc</code> 打开强制退出窗口，选中 DeepSeek 相关项 → <b>强制退出</b>，再拖到废纸篓。</p></div>
       </details>
+      <details><summary>装完 dsh 命令，终端里还是找不到这个命令</summary>
+        <div class="body">
+          <p data-os="win">PATH 没刷新。<b>关掉</b>命令行窗口，重新开一个再试；还不行就看「系统 → 系统信息 → 高级系统设置 → 环境变量」，用户变量 <code class="inl">Path</code> 里应该有客户端写进去的那个目录。最后招：在客户端里「移除 → 安装」重来一次。</p>
+          <p data-os="mac">终端窗口要在装完<b>之后</b>新开一个（旧的读不到新 PATH）。先用 <code class="inl">which -a dsh</code> 看它在不在、在哪：如果装在 <code class="inl">~/.local/bin</code> 而那里没进 PATH，在 <code class="inl">~/.zshrc</code> 末尾加一行 <code class="inl">export PATH="$HOME/.local/bin:$PATH"</code>，存盘后运行 <code class="inl">source ~/.zshrc</code>（或直接重开终端）。还不行就在客户端里「移除 → 安装」重来一次。</p>
+        </div>
+      </details>
       <details><summary>已经卸载了，命令行里的 dsh 还残留 / 报错</summary>
         <div class="body">
           <p data-os="win">说明卸载时跳过了「管理 dsh 命令 → 移除」。在命令行运行 <code class="inl">where dsh</code>，它会列出残留路径（一般在 <code class="inl">%LOCALAPPDATA%\Programs\</code> 下，或 npm 全局目录 <code class="inl">npm root -g</code> 里）。把那个 <code class="inl">dsh.cmd</code> / <code class="inl">dsh.exe</code> 删掉即可，<b>别把整个文件夹都删了</b>。如果提示"找不到命令"，说明本来就清干净了，不用管。</p>
@@ -834,6 +880,7 @@
             <tr data-os="mac"><td>找回被藏起来的窗口</td><td>点右上角菜单栏里的图标，或点 Dock 图标</td></tr>
             <tr data-os="win"><td>彻底退出</td><td>右键托盘图标 → 退出</td></tr>
             <tr data-os="mac"><td>彻底退出</td><td><code class="inl">⌘Q</code>，或菜单栏图标 → 退出</td></tr>
+            <tr><td>把 <code class="inl">dsh</code> 命令装进终端</td><td>客户端菜单 → 安装 dsh 命令…（7.1）</td></tr>
             <tr data-os="win"><td>卸载</td><td>先「管理 dsh 命令 → 移除」，再从「设置 → 应用」卸载</td></tr>
             <tr data-os="mac"><td>卸载</td><td>先「管理 dsh 命令 → 移除」，再把应用拖进废纸篓</td></tr>
             <tr data-os="win"><td>数据在哪</td><td><code class="inl">%USERPROFILE%\.dsh</code>（隐藏文件夹，删前先看 8.2）</td></tr>
@@ -908,32 +955,92 @@
     });
   }
 
-  // 目录高亮
-  var links = Array.prototype.slice.call(document.querySelectorAll('.toc a'));
-  var map = {};
-  links.forEach(function (a) { map[a.getAttribute('href').slice(1)] = a; });
-  var targets = Object.keys(map).map(function (id) { return document.getElementById(id); }).filter(Boolean);
-  if ('IntersectionObserver' in window && targets.length) {
-    var visible = [];
-    var io = new IntersectionObserver(function (entries) {
-      entries.forEach(function (en) {
-        var i = visible.indexOf(en.target.id);
-        if (en.isIntersecting) {
-          if (i === -1) { visible.push(en.target.id); }
-        } else if (i !== -1) {
-          visible.splice(i, 1);
-        }
-      });
-      // 取文档顺序里最靠后的可见区块，滚过子项后能自动回退到父项
-      var current = null;
-      targets.forEach(function (t) {
-        if (visible.indexOf(t.id) !== -1) { current = t.id; }
-      });
-      links.forEach(function (a) { a.classList.remove('active'); });
-      if (current && map[current]) { map[current].classList.add('active'); }
-    }, { rootMargin: '-10% 0px -70% 0px', threshold: 0 });
-    targets.forEach(function (t) { io.observe(t); });
+  // 目录：点击跳转 + 滚动高亮
+  var tocLinks = Array.prototype.slice.call(document.querySelectorAll('.toc a'));
+  var linkMap = {};
+  tocLinks.forEach(function (a) { linkMap[a.getAttribute('href').slice(1)] = a; });
+  var spyTargets = tocLinks.map(function (a) {
+    return document.getElementById(a.getAttribute('href').slice(1));
+  });
+
+  function keepLinkVisible(a) {
+    if (!tocEl || tocEl.scrollHeight <= tocEl.clientHeight + 4) return;
+    var r = a.getBoundingClientRect(), box = tocEl.getBoundingClientRect();
+    if (r.top < box.top + 6) tocEl.scrollTop -= (box.top + 6 - r.top);
+    else if (r.bottom > box.bottom - 6) tocEl.scrollTop += (r.bottom - box.bottom + 6);
   }
+
+  function setActive(id) {
+    tocLinks.forEach(function (a) { a.classList.remove('active'); });
+    var a = linkMap[id];
+    if (a) { a.classList.add('active'); keepLinkVisible(a); }
+  }
+
+  var spyTick = false, spyLock = 0, spyPending = null;
+  var smoothOK = 'scrollBehavior' in document.documentElement.style;
+
+  // 点目录：自己算位置再滚，避免和浏览器锚点、懒加载图片抢位置
+  tocLinks.forEach(function (a) {
+    a.addEventListener('click', function (e) {
+      var id = a.getAttribute('href').slice(1);
+      var t = document.getElementById(id);
+      if (!t) return;
+      e.preventDefault();
+      var y = t.getBoundingClientRect().top + (window.pageYOffset || document.documentElement.scrollTop || 0) - 16;
+      spyLock = Date.now() + 1200;
+      spyPending = { id: id, y: Math.max(y, 0) };
+      if (smoothOK) window.scrollTo({ top: Math.max(y, 0), behavior: 'smooth' });
+      else window.scrollTo(0, Math.max(y, 0));
+      try { history.replaceState(null, '', '#' + id); } catch (err) { /* file:// 下可能被拒 */ }
+      setActive(id);
+    });
+  });
+
+  // 高亮：按"已经滚过谁"来算，不用 IntersectionObserver（子标题太矮会抖）
+  function updateSpy() {
+    spyTick = false;
+    var scrolled = window.pageYOffset || document.documentElement.scrollTop || 0;
+    // 点击后在等平滑滚动落位：到位了就锁定目标，中途不抢高亮
+    if (spyPending) {
+      var maxY = Math.max(0, document.documentElement.scrollHeight - window.innerHeight);
+      var goal = Math.min(spyPending.y, maxY);   // 目标在页面底部时滚不到那么远
+      if (Math.abs(scrolled - goal) < 4 || Date.now() > spyLock) {
+        setActive(spyPending.id); spyPending = null; spyLock = 0;
+      }
+      return;
+    }
+    if (Date.now() < spyLock) return;
+    var current = null;
+    spyTargets.forEach(function (t) {
+      if (!t) return;
+      if (t.getBoundingClientRect().top <= 140) current = t.id;
+    });
+    var doc = document.documentElement;
+    var atBottom = window.innerHeight + (window.pageYOffset || 0) >= doc.scrollHeight - 4;
+    if (atBottom) {                            // 滚到底了，最后一节永远点亮
+      for (var i = spyTargets.length - 1; i >= 0; i--) {
+        if (spyTargets[i]) { current = spyTargets[i].id; break; }
+      }
+    }
+    setActive(current || (spyTargets[0] && spyTargets[0].id));
+  }
+  window.addEventListener('scroll', function () {
+    if (!spyTick) { spyTick = true; requestAnimationFrame(updateSpy); }
+  }, { passive: true });
+  window.addEventListener('resize', updateSpy);
+  ['wheel', 'touchstart', 'keydown'].forEach(function (ev) {
+    window.addEventListener(ev, function () { spyPending = null; spyLock = 0; }, { passive: true });
+  });
+  updateSpy();
+  window.addEventListener('load', function () {
+    updateSpy();
+    var id = (location.hash || '').slice(1);
+    if (linkMap[id]) { setActive(id); spyPending = null; }
+  });
+  window.addEventListener('hashchange', function () {
+    var id = (location.hash || '').slice(1);
+    if (linkMap[id]) setActive(id);
+  });
 
   // 系统切换：Windows / macOS
   var OS_KEY = 'dsh-tut-os';
